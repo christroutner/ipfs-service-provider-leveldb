@@ -3,7 +3,7 @@
 */
 
 // Public npm libraries
-import level from 'level'
+import { Level } from 'level'
 
 // Hack to get __dirname back.
 // https://blog.logrocket.com/alternatives-dirname-node-js-es-modules/
@@ -13,7 +13,7 @@ const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 class LevelDb {
   constructor (localConfig = {}) {
     // Encapsulate dependencies
-    this.level = level
+    this.Level = Level
 
     // Bind 'this' object to all subfunctions.
     this.openDbs = this.openDbs.bind(this)
@@ -23,10 +23,12 @@ class LevelDb {
   // Open the Level databases. This function should be calld on startup.
   openDbs () {
     try {
-      this.userDb = this.level(`${__dirname.toString()}/../../../leveldb/current/users`, {
+      this.userDb = new this.Level(`${__dirname.toString()}/../../../leveldb-data/current/users`, {
         valueEncoding: 'json',
         cacheSize: 1024 * 1024 * 10 // 10 MB
       })
+
+      console.log('All Level Databases loaded.')
 
       return {
         userDb: this.userDb

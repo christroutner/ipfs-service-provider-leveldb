@@ -67,6 +67,9 @@ class Adapters {
         console.log('Not starting IPFS node since this is an e2e test.')
       }
 
+      // Load the Level Database
+      this.levelDb.openDbs()
+
       console.log('Async Adapters have been started.')
 
       return true
