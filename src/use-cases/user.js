@@ -92,6 +92,9 @@ class UserLib {
       const token = this.generateToken({ user: userEntity })
       userEntity.token = token
 
+      // Save the user to the database
+      await this.adapters.levelDb.userDb.put(userEntity.email, userEntity)
+
       return { userData: userEntity, token }
     } catch (err) {
       console.log('Error in use-cases/user.js createUserLevel(): ', err)

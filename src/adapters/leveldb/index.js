@@ -3,9 +3,9 @@
 */
 
 // Public npm libraries
-import { Level } from 'level'
+import level from 'level'
 
-// Hack to get __dirname back.
+// Hack to get __dirname back in ESM.
 // https://blog.logrocket.com/alternatives-dirname-node-js-es-modules/
 import * as url from 'url'
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
@@ -13,7 +13,7 @@ const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 class LevelDb {
   constructor (localConfig = {}) {
     // Encapsulate dependencies
-    this.Level = Level
+    this.level = level
 
     // Bind 'this' object to all subfunctions.
     this.openDbs = this.openDbs.bind(this)
@@ -23,7 +23,7 @@ class LevelDb {
   // Open the Level databases. This function should be calld on startup.
   openDbs () {
     try {
-      this.userDb = new this.Level(`${__dirname.toString()}/../../../leveldb-data/current/users`, {
+      this.userDb = this.level(`${__dirname.toString()}/../../../leveldb-data/current/users`, {
         valueEncoding: 'json',
         cacheSize: 1024 * 1024 * 10 // 10 MB
       })
