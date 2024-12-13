@@ -3,9 +3,14 @@
   functions are called by the /user REST API endpoints.
 */
 
-import UserEntity from '../entities/user.js'
+// Global libraries
+import jwt from 'jsonwebtoken'
+import bcrypt from 'bcryptjs'
 
+// Local libraries
+import UserEntity from '../entities/user.js'
 import wlogger from '../adapters/wlogger.js'
+import config from '../../config/index.js'
 
 class UserLib {
   constructor (localConfig = {}) {
@@ -20,6 +25,20 @@ class UserLib {
     // Encapsulate dependencies
     this.UserEntity = new UserEntity()
     this.UserModel = this.adapters.localdb.Users
+    this.jwt = jwt
+    this.config = config
+    this.bcrypt = bcrypt
+
+    // Bind 'this' object to all subfunctions
+    this.createUser = this.createUser.bind(this)
+    this.createUserLevel = this.createUserLevel.bind(this)
+    this.getAllUsers = this.getAllUsers.bind(this)
+    this.getUser = this.getUser.bind(this)
+    this.updateUser = this.updateUser.bind(this)
+    this.deleteUser = this.deleteUser.bind(this)
+    this.authUser = this.authUser.bind(this)
+    this.generateToken = this.generateToken.bind(this)
+    this.hashPassword = this.hashPassword.bind(this)
   }
 
   // Create a new user model and add it to the Mongo database.
@@ -51,6 +70,32 @@ class UserLib {
     } catch (err) {
       // console.log('createUser() error: ', err)
       wlogger.error('Error in lib/users.js/createUser()')
+      throw err
+    }
+  }
+
+  // createUser() but using LevelDB.
+  async createUserLevel (userObj) {
+    try {
+      // Input Validation
+      let userEntity = this.UserEntity.validate(userObj)
+      console.log('userEntity: ', userEntity)
+
+      // Replace the password with a hash
+      userEntity = await this.hashPassword(userEntity)
+      console.log('userEntity: ', userEntity)
+
+      // Enforce default value of 'user'
+      userEntity.type = 'user'
+
+      // Generate a JWT token for the user.
+      const token = this.generateToken({ user: userEntity })
+      userEntity.token = token
+
+      return { userData: userEntity, token }
+    } catch (err) {
+      console.log('Error in use-cases/user.js createUserLevel(): ', err)
+      wlogger.error('Error in use-cases/user.js createUserLevel()')
       throw err
     }
   }
@@ -177,6 +222,37 @@ class UserLib {
     } catch (err) {
       // console.error('Error in users.js/authUser()')
       console.log('')
+      throw err
+    }
+  }
+
+  // Generate a JWT token for the user to authenticate when making REST API calls.
+  generateToken (inObj = {}) {
+    try {
+      const { user } = inObj
+
+      const token = jwt.sign({ id: user.id }, this.config.token)
+      // console.log(`config.token: ${config.token}`)
+      // console.log(`generated token: ${token}`)
+      return token
+    } catch (err) {
+      wlogger.error('Error in use-cases/user.js generateToken()')
+      throw err
+    }
+  }
+
+  // Rather than storing the raw password in the database, we store a hash
+  // of the password.
+  async hashPassword (user) {
+    try {
+      const salt = await this.bcrypt.genSalt(10)
+      const hash = await this.bcrypt.hash(user.password, salt)
+
+      user.password = hash
+
+      return user
+    } catch (err) {
+      wlogger.error('Error in use-cases/user.js hashPassword()')
       throw err
     }
   }

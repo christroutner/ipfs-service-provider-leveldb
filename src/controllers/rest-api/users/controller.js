@@ -27,6 +27,10 @@ class UserRESTControllerLib {
     // this.userUseCases = this.useCases.user
 
     _this = this
+
+    // Bind 'this' object to all subfunctions.
+    this.createUser = this.createUser.bind(this)
+    this.handleError = this.handleError.bind(this)
   }
 
   /**
@@ -74,9 +78,12 @@ class UserRESTControllerLib {
     try {
       const userObj = ctx.request.body.user
 
-      const { userData, token } = await _this.useCases.user.createUser(userObj)
-      // console.log('userData: ', userData)
-      // console.log('token: ', token)
+      // const { userData, token } = await _this.useCases.user.createUser(userObj)
+      // // console.log('userData: ', userData)
+      // // console.log('token: ', token)
+      //
+
+      const { userData, token } = await this.useCases.user.createUserLevel(userObj)
 
       ctx.body = {
         user: userData,
@@ -86,7 +93,7 @@ class UserRESTControllerLib {
       // console.log(`err.message: ${err.message}`)
       // console.log('err: ', err)
       // ctx.throw(422, err.message)
-      _this.handleError(ctx, err)
+      this.handleError(ctx, err)
     }
   }
 

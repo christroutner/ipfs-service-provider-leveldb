@@ -96,7 +96,7 @@ class Admin {
       return context
     } catch (err) {
       // Handle existing system user.
-      if (err.response.status === 422) {
+      if (err.response && err.response.status === 422) {
         try {
           // Delete the existing user
           await _this.deleteExistingSystemUser()

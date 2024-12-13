@@ -106,11 +106,11 @@ class Server {
       this.server = await app.listen(this.config.port)
       console.log(`Server started on ${this.config.port}`)
 
-      if (!this.config.noMongo) {
-        // Create the system admin user.
-        const success = await this.adminLib.createSystemUser()
-        if (success) console.log('System admin user created.')
-      }
+      // if (!this.config.noMongo) {
+      //   // Create the system admin user.
+      //   const success = await this.adminLib.createSystemUser()
+      //   if (success) console.log('System admin user created.')
+      // }
 
       // Attach the other IPFS controllers.
       // Skip if this is a test environment.
