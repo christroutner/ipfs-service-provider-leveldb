@@ -11,7 +11,7 @@ import * as url from 'url'
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 
 class LevelDb {
-  constructor(localConfig = {}) {
+  constructor (localConfig = {}) {
     // Encapsulate dependencies
     this.level = level
 
@@ -21,7 +21,7 @@ class LevelDb {
   }
 
   // Open the Level databases. This function should be calld on startup.
-  openDbs() {
+  openDbs () {
     try {
       this.userDb = this.level(`${__dirname.toString()}/../../../leveldb/current/users`, {
         valueEncoding: 'json',
@@ -31,13 +31,13 @@ class LevelDb {
       return {
         userDb: this.userDb
       }
-    } catch(err) {
+    } catch (err) {
       console.error('Error in adapters/leveldb/index.js openDbs()')
       throw err
     }
   }
 
-  async closeDbs() {
+  async closeDbs () {
     await this.userDb.close()
 
     // Signal that the databases were close successfully.
