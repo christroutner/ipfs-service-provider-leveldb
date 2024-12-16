@@ -116,6 +116,36 @@ class UserLib {
     }
   }
 
+  // Returns an array of all user models in the User level database.
+  async getAllUsersLevel () {
+    try {
+      const users = []
+
+      const userDb = this.adapters.levelDb.userDb
+      const stream = userDb.createReadStream()
+
+      return new Promise((resolve, reject) => {
+        stream.on('data', function (data) {
+          // console.log('data: ', data)
+
+          // console.log(`user ${data.key}: ${JSON.stringify(data.value, null, 2)}`)
+          users.push(data.value)
+        })
+
+        stream.on('end', function () {
+          resolve(users)
+        })
+
+        stream.on('error', function (err) {
+          reject(err)
+        })
+      })
+    } catch (err) {
+      wlogger.error('Error in lib/users.js/getAllUsersLevel()')
+      throw err
+    }
+  }
+
   // Get the model for a specific user.
   async getUser (params) {
     try {

@@ -101,7 +101,7 @@ describe('#controllers/rest-api/users/controller.js', () => {
       try {
         // Force an error
         sandbox
-          .stub(uut.useCases.user, 'getAllUsers')
+          .stub(uut.useCases.user, 'getAllUsersLevel')
           .rejects(new Error('test error'))
 
         await uut.getUsers(ctx)

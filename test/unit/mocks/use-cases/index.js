@@ -16,6 +16,10 @@ class UserUseCaseMock {
     return true
   }
 
+  async getAllUsersLevel() {
+    return true
+  }
+
   async getUser(params) {
     return true
   }

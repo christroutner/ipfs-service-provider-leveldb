@@ -23,6 +23,12 @@ async function getAllUsers () {
 
       console.log(`user ${data.key}: ${JSON.stringify(data.value, null, 2)}`)
     })
+    // .on('close', function () {
+    //   console.log('Stream closed')
+    // })
+    // .on('end', function () {
+    //   console.log('Stream ended')
+    // })
   } catch (err) {
     console.error(err)
   }

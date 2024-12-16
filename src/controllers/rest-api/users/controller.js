@@ -127,7 +127,9 @@ class UserRESTControllerLib {
    */
   async getUsers (ctx) {
     try {
-      const users = await _this.useCases.user.getAllUsers()
+      // const users = await _this.useCases.user.getAllUsers()
+
+      const users = await this.useCases.user.getAllUsersLevel()
 
       ctx.body = { users }
     } catch (err) {
