@@ -18,7 +18,7 @@ import axios from 'axios'
 import mongoose from 'mongoose'
 
 // Local libraries
-import User from '../adapters/localdb/models/users.js'
+// import User from '../adapters/localdb/models/users.js'
 import config from '../../config/index.js'
 import JsonFiles from '../adapters/json-files.js'
 
@@ -38,21 +38,30 @@ const context = {}
 let _this
 class Admin {
   constructor () {
+    // Encapsulate dependencies
     this.axios = axios
-    this.User = User
+    // this.User = User
     this.config = config
     this.jsonFiles = jsonFiles
     this.context = context
 
     _this = this
+
+    // Bind 'this' object to all subfunctions
+    this.createSystemUser = this.createSystemUser.bind(this)
+    this.deleteExistingSystemUser = this.deleteExistingSystemUser.bind(this)
+    this.loginAdmin = this.loginAdmin.bind(this)
+    this._randomString = this._randomString.bind(this)
   }
 
   // Create the first user in the system. A 'admin' level system user that is
   // used by the Listing Manager and test scripts, in order access private API
   // functions.
-  async createSystemUser () {
+  async createSystemUser (inObj = {}) {
     // Create the system user.
     try {
+      const { adapters } = inObj
+
       context.password = _this._randomString(20)
 
       const options = {
@@ -74,21 +83,21 @@ class Admin {
       context.token = result.data.token
 
       // Get the mongoDB entry
-      const user = await _this.User.findById(context.id)
+      const user = await adapters.levelDb.userDb.get('system@system.com')
+      // console.log('createSystemUser() user: ', user)
 
       // Change the user type to admin
       user.type = 'admin'
       // console.log(`user created: ${JSON.stringify(user, null, 2)}`)
 
       // Save the user model.
-      await user.save()
+      await adapters.levelDb.userDb.put('system@system.com', user)
 
       // console.log(`admin user created: ${JSON.stringify(result.body, null, 2)}`)
       // console.log(`with password: ${context.password}`)
 
       // Write out the system user information to a JSON file that external
       // applications like the Task Manager and the test scripts can access.
-
       await jsonFiles.writeJSON(context, JSON_PATH)
       // console.log('context: ', context)
       // console.log('JSON_PATH: ', JSON_PATH)

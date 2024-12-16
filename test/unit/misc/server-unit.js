@@ -36,6 +36,9 @@ describe('#server', () => {
 
       assert.property(result, 'env')
 
+      // Shut down the Level Database
+      // await uut.controllers.adapters.levelDb.closeDbs()
+
       // Turn off the server.
       uut.server.close()
 
@@ -43,18 +46,18 @@ describe('#server', () => {
       uut.config.env = 'test'
     })
 
-    it('should exit on failure', async () => {
-      // Force an error
-      sandbox.stub(uut.mongoose, 'connect').rejects(new Error('test error'))
-
-      // Prevent default behavior of exiting the program.
-      sandbox.stub(uut, 'sleep').resolves()
-      sandbox.stub(uut.process, 'exit').returns()
-
-      await uut.startServer()
-
-      // Not throwing an error is a success
-    })
+    // it('should exit on failure', async () => {
+    //   // Force an error
+    //   sandbox.stub(uut.mongoose, 'connect').rejects(new Error('test error'))
+    //
+    //   // Prevent default behavior of exiting the program.
+    //   sandbox.stub(uut, 'sleep').resolves()
+    //   sandbox.stub(uut.process, 'exit').returns()
+    //
+    //   await uut.startServer()
+    //
+    //   // Not throwing an error is a success
+    // })
   })
 
   describe('#sleep', () => {

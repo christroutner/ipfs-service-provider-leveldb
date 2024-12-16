@@ -8,6 +8,10 @@ class UserUseCaseMock {
     return {}
   }
 
+  async createUserLevel(userObj) {
+    return {}
+  }
+
   async getAllUsers() {
     return true
   }

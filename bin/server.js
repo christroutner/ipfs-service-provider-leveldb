@@ -108,7 +108,7 @@ class Server {
 
       if (!this.config.noMongo) {
         // Create the system admin user.
-        const success = await this.adminLib.createSystemUser()
+        const success = await this.adminLib.createSystemUser({ adapters: this.controllers.adapters })
         if (success) console.log('System admin user created.')
       }
 
@@ -127,6 +127,9 @@ class Server {
       return app
     } catch (err) {
       console.error('Could not start server. Error: ', err)
+
+      // Close the LevelDB.
+      await this.controllers.adapters.levelDb.closeDbs()
 
       console.log(
         'Exiting after 5 seconds. Depending on process manager to restart.'

@@ -16,7 +16,7 @@ let uut
 let sandbox
 let ctx
 
-describe('#Users-REST-Controller', () => {
+describe('#controllers/rest-api/users/controller.js', () => {
   // const testUser = {}
 
   beforeEach(() => {

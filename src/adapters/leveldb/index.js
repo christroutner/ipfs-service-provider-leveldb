@@ -40,7 +40,9 @@ class LevelDb {
   }
 
   async closeDbs () {
-    await this.userDb.close()
+    if (this.userDb) {
+      await this.userDb.close()
+    }
 
     // Signal that the databases were close successfully.
     return true

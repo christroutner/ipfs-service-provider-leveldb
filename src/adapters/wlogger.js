@@ -62,7 +62,8 @@ class Wlogger {
   outputToConsole () {
     this.wlogger.add(
       new winston.transports.Console({
-        format: winston.format.simple(),
+        // format: winston.format.simple(),
+        format: winston.format.prettyPrint(),
         level: 'info'
       })
     )
