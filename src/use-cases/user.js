@@ -39,6 +39,7 @@ class UserLib {
     this.authUser = this.authUser.bind(this)
     this.generateToken = this.generateToken.bind(this)
     this.hashPassword = this.hashPassword.bind(this)
+    this.validatePassword = this.validatePassword.bind(this)
   }
 
   // Create a new user model and add it to the Mongo database.
@@ -315,6 +316,16 @@ class UserLib {
       return user
     } catch (err) {
       wlogger.error('Error in use-cases/user.js hashPassword()')
+      throw err
+    }
+  }
+
+  // Validate that the submitted password matches what is saved in the database.
+  async validatePassword () {
+    try {
+      console.log('validatePassword() called')
+    } catch (err) {
+      console.log('Error in use-cases/user.js validatePassword()')
       throw err
     }
   }

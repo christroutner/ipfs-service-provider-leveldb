@@ -44,7 +44,7 @@ class UserRESTControllerLib {
    * @apiGroup REST Users
    *
    * @apiExample Example usage:
-   * curl -H "Content-Type: application/json" -X POST -d '{ "user": { "email": "email@format.com", "name": "my name", "password": "secretpasas" } }' localhost:5010/users
+   * curl -H "Content-Type: application/json" -X POST -d '{ "user": { "email": "email@format.com", "name": "my name", "password": "secretpasas" } }' localhost:5020/users
    *
    * @apiParam {Object} user          User object (required)
    * @apiParam {String} user.email Email
@@ -80,6 +80,7 @@ class UserRESTControllerLib {
    */
   async createUser (ctx) {
     try {
+      console.log('createUser REST controller called.')
       const userObj = ctx.request.body.user
 
       // const { userData, token } = await _this.useCases.user.createUser(userObj)

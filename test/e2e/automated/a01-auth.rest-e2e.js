@@ -15,15 +15,15 @@ import axios from 'axios'
 import config from '../../../config/index.js'
 import Server from '../../../bin/server.js'
 import testUtils from '../../utils/test-utils.js'
-import AdminLib from '../../../src/adapters/admin.js'
-const adminLib = new AdminLib()
+// import AdminLib from '../../../src/adapters/admin.js'
+// const adminLib = new AdminLib()
 
 // const request = supertest.agent(app.listen())
 const context = {}
 
 const LOCALHOST = `http://localhost:${config.port}`
 
-describe('Auth', () => {
+describe('#Auth', () => {
   before(async () => {
     const app = new Server()
 
@@ -34,10 +34,10 @@ describe('Auth', () => {
     // await app.controllers.adapters.ipfs.stop()
 
     // Delete all previous users in the database.
-    await testUtils.deleteAllUsers()
+    // await testUtils.deleteAllUsers()
 
     // Create a new admin user.
-    await adminLib.createSystemUser()
+    // await adminLib.createSystemUser()
 
     const userObj = {
       email: 'test@test.com',
@@ -51,8 +51,8 @@ describe('Auth', () => {
     context.token = testUser.token
   })
 
-  describe('POST /auth', () => {
-    it('should throw 401 if credentials are incorrect', async () => {
+  describe('#POST /auth', () => {
+    it('#should throw 401 if credentials are incorrect', async () => {
       try {
         const options = {
           method: 'post',
@@ -94,7 +94,7 @@ describe('Auth', () => {
       }
     })
 
-    it('should auth user', async () => {
+    it('#should auth user', async () => {
       try {
         const options = {
           method: 'post',

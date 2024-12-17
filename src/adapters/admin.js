@@ -120,7 +120,7 @@ class Admin {
           throw err2
         }
       } else {
-        console.log('Error in admin.js/createSystemUser: ')
+        console.log('Error in admin.js/createSystemUser: ', err)
         // process.end(1)
         throw err
       }
