@@ -75,4 +75,16 @@ const localdb = {
   }
 }
 
+const levelDb = {
+  openDbs: () => {
+    return true
+  },
+  closeDbs: () => {
+    return true
+  },
+  userDb: {
+    get: async () => {}
+  }
+}
+
 export default { ipfs, localdb };

@@ -30,6 +30,10 @@ class UserRESTControllerLib {
 
     // Bind 'this' object to all subfunctions.
     this.createUser = this.createUser.bind(this)
+    this.getUsers = this.getUsers.bind(this)
+    this.getUser = this.getUser.bind(this)
+    this.updateUser = this.updateUser.bind(this)
+    this.deleteUser = this.deleteUser.bind(this)
     this.handleError = this.handleError.bind(this)
   }
 
@@ -168,7 +172,8 @@ class UserRESTControllerLib {
    */
   async getUser (ctx, next) {
     try {
-      const user = await _this.useCases.user.getUser(ctx.params)
+      // const user = await _this.useCases.user.getUser(ctx.params)
+      const user = await this.useCases.user.getUser(ctx.params)
 
       ctx.body = {
         user

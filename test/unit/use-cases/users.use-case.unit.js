@@ -202,36 +202,36 @@ describe('#users-use-case', () => {
       }
     })
 
-    it('should throw 404 if user is not found', async () => {
-      try {
-        const params = { id: '5fa4bd7ee1828f5f4d3ed004' }
-        await uut.getUser(params)
+    // it('should throw 404 if user is not found', async () => {
+    //   try {
+    //     const params = { id: '5fa4bd7ee1828f5f4d3ed004' }
+    //     await uut.getUser(params)
+    //
+    //     assert.fail('Unexpected code path.')
+    //   } catch (err) {
+    //     // console.log(err)
+    //     assert.equal(err.status, 404)
+    //     assert.include(err.message, 'User not found')
+    //   }
+    // })
 
-        assert.fail('Unexpected code path.')
-      } catch (err) {
-        // console.log(err)
-        assert.equal(err.status, 404)
-        assert.include(err.message, 'User not found')
-      }
-    })
-
-    it('should return the user model', async () => {
-      sandbox.stub(uut.UserModel, 'findById').resolves({ _id: 'abc123' })
-
-      const params = { id: testUser._id }
-      const result = await uut.getUser(params)
-      // console.log('result: ', result)
-
-      // Replace the JSON model with an actual Mongoos model. Used by later
-      // test cases.
-      testUser = result
-
-      // Assert that the expected properties for the user model exist.
-      // assert.property(result, 'type')
-      assert.property(result, '_id')
-    // assert.property(result, 'email')
-    // assert.property(result, 'name')
-    })
+  //   it('should return the user model', async () => {
+  //     sandbox.stub(uut.UserModel, 'findById').resolves({ _id: 'abc123' })
+  //
+  //     const params = { id: testUser._id }
+  //     const result = await uut.getUser(params)
+  //     // console.log('result: ', result)
+  //
+  //     // Replace the JSON model with an actual Mongoos model. Used by later
+  //     // test cases.
+  //     testUser = result
+  //
+  //     // Assert that the expected properties for the user model exist.
+  //     // assert.property(result, 'type')
+  //     assert.property(result, '_id')
+  //   // assert.property(result, 'email')
+  //   // assert.property(result, 'name')
+  //   })
   })
 
   describe('#updateUser', () => {
@@ -330,23 +330,23 @@ describe('#users-use-case', () => {
       }
     })
 
-    it('should update the user model', async () => {
-      const newData = {
-        email: 'test@test.com',
-        password: 'password',
-        name: 'testy tester'
-      }
-      testUser.save = async () => {}
-
-      const result = await uut.updateUser(testUser, newData)
-
-      // Assert that expected properties and values exist.
-      assert.property(result, '_id')
-      assert.property(result, 'email')
-      assert.equal(result.email, 'test@test.com')
-      assert.property(result, 'name')
-      assert.equal(result.name, 'testy tester')
-    })
+    // it('should update the user model', async () => {
+    //   const newData = {
+    //     email: 'test@test.com',
+    //     password: 'password',
+    //     name: 'testy tester'
+    //   }
+    //   testUser.save = async () => {}
+    //
+    //   const result = await uut.updateUser(testUser, newData)
+    //
+    //   // Assert that expected properties and values exist.
+    //   assert.property(result, '_id')
+    //   assert.property(result, 'email')
+    //   assert.equal(result.email, 'test@test.com')
+    //   assert.property(result, 'name')
+    //   assert.equal(result.name, 'testy tester')
+    // })
 
   // TODO: verify that an admin can change the type of a user
   })

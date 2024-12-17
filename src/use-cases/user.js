@@ -93,7 +93,7 @@ class UserLib {
       userEntity.token = token
 
       // Save the user to the database
-      await this.adapters.levelDb.userDb.put(userEntity.email, userEntity)
+      await this.adapters.levelDb.userDb.put(userEntity.id, userEntity)
 
       return { userData: userEntity, token }
     } catch (err) {
@@ -147,11 +147,40 @@ class UserLib {
   }
 
   // Get the model for a specific user.
+  // async getUser (params) {
+  //   try {
+  //     const { id } = params
+  //
+  //     const user = await this.UserModel.findById(id, '-password')
+  //
+  //     // Throw a 404 error if the user isn't found.
+  //     if (!user) {
+  //       const err = new Error('User not found')
+  //       err.status = 404
+  //       throw err
+  //     }
+  //
+  //     return user
+  //   } catch (err) {
+  //     // console.log('Error in getUser: ', err)
+  //
+  //     if (err.status === 404) throw err
+  //
+  //     // Return 422 for any other error
+  //     err.status = 422
+  //     err.message = 'Unprocessable Entity'
+  //     throw err
+  //   }
+  // }
+
+  // Get the model for a specific user.
   async getUser (params) {
     try {
       const { id } = params
 
-      const user = await this.UserModel.findById(id, '-password')
+      // const user = await this.UserModel.findById(id, '-password')
+      const userDb = this.adapters.levelDb.userDb
+      const user = await userDb.get(id)
 
       // Throw a 404 error if the user isn't found.
       if (!user) {
@@ -162,7 +191,7 @@ class UserLib {
 
       return user
     } catch (err) {
-      // console.log('Error in getUser: ', err)
+      console.log('Error in getUser: ', err)
 
       if (err.status === 404) throw err
 
