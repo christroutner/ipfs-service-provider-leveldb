@@ -1,7 +1,7 @@
 import Passport from '../../../adapters/passport.js'
 const passport = new Passport()
 
-let _this
+// let _this
 
 class AuthRESTController {
   constructor (localConfig = {}) {
@@ -19,8 +19,11 @@ class AuthRESTController {
       )
     }
 
-    _this = this
+    // _this = this
     this.passport = passport
+
+    // Bind 'this' object to all subfunctions
+    this.authUser = this.authUser.bind(this)
   }
 
   /**
@@ -44,7 +47,7 @@ class AuthRESTController {
    * @apiParam {String} password  User password.
    *
    * @apiExample Example usage:
-   * curl -H "Content-Type: application/json" -X POST -d '{ "username": "johndoe@gmail.com", "password": "foo" }' localhost:5000/auth
+   * curl -H "Content-Type: application/json" -X POST -d '{ "username": "email@format.com", "password": "secretpasas" }' localhost:5020/auth
    *
    * @apiSuccess {Object}   user           User object
    * @apiSuccess {ObjectId} user._id       User id
@@ -73,23 +76,40 @@ class AuthRESTController {
    */
   async authUser (ctx, next) {
     try {
-      // Retrieve the user from the database after they've proven the correct
-      // password.
-      const user = await _this.passport.authUser(ctx, next)
-      if (!user) {
+      console.log('ctx.request.body: ', ctx.request.body)
+      const { username, password } = ctx.request.body
+
+      const { token, user } = await this.useCases.user.authUser(username, password)
+
+      // If the password was not authenticated, return a 401 error.
+      if (!token) {
         ctx.throw(401)
       }
 
-      const token = user.generateToken()
-
-      const response = user.toJSON()
-
-      delete response.password
+      delete user.password
 
       ctx.body = {
         token,
-        user: response
+        user
       }
+
+      // Retrieve the user from the database after they've proven the correct
+      // password.
+      // const user = await _this.passport.authUser(ctx, next)
+      // if (!user) {
+      //   ctx.throw(401)
+      // }
+      //
+      // const token = user.generateToken()
+      //
+      // const response = user.toJSON()
+      //
+      // delete response.password
+      //
+      // ctx.body = {
+      //   token,
+      //   user: response
+      // }
     } catch (err) {
       ctx.throw(401)
     }

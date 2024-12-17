@@ -42,6 +42,7 @@ class UserLib {
     this.validatePassword = this.validatePassword.bind(this)
   }
 
+  // DEPRECATED
   // Create a new user model and add it to the Mongo database.
   async createUser (userObj) {
     try {
@@ -93,8 +94,10 @@ class UserLib {
       const token = this.generateToken({ user: userEntity })
       userEntity.token = token
 
-      // Save the user to the database
-      await this.adapters.levelDb.userDb.put(userEntity.id, userEntity)
+      // Save the user to the database.
+      // Note: Users are looked up by their email. Email addresses must be unique,
+      // e.g. there can not be two users with the same email address.
+      await this.adapters.levelDb.userDb.put(userEntity.email, userEntity)
 
       return { userData: userEntity, token }
     } catch (err) {
@@ -265,26 +268,50 @@ class UserLib {
   // the database, then it returns the user model. The Koa REST API uses the
   // Passport library for this functionality. This function is used to
   // authenticate users who login via the JSON RPC.
-  async authUser (login, passwd) {
+  async authUser (login, password) {
     try {
-      // console.log('login: ', login)
-      // console.log('passwd: ', passwd)
+      console.log('login: ', login)
+      console.log('password: ', password)
 
-      const user = await this.UserModel.findOne({ email: login })
-      if (!user) {
-        throw new Error('User not found')
+      // Retrieve the user model from the database.
+      const user = await this.adapters.levelDb.userDb.get(login)
+      console.log('authUser() user model: ', user)
+
+      // Hash the provided password
+      const result = await this.hashPassword({ password })
+      console.log('result: ', result)
+      const hashedPswd = result.password
+
+      console.log('user.password: ', user.password)
+      console.log('hashedPswd: ', hashedPswd)
+
+      // Validate the password
+      // const passwordIsValid = user.password === hashedPswd
+      const passwordIsValid = await this.bcrypt.compare(password, user.password)
+
+      if (!passwordIsValid) {
+        return false
       }
 
-      const isMatch = await user.validatePassword(passwd)
+      const token = this.generateToken({ user })
 
-      if (!isMatch) {
-        throw new Error('Login credential do not match')
-      }
+      return { token, user }
 
-      return user
+      // const user = await this.UserModel.findOne({ email: login })
+      // if (!user) {
+      //   throw new Error('User not found')
+      // }
+      //
+      // const isMatch = await user.validatePassword(passwd)
+      //
+      // if (!isMatch) {
+      //   throw new Error('Login credential do not match')
+      // }
+      //
+      // return user
     } catch (err) {
       // console.error('Error in users.js/authUser()')
-      console.log('')
+      console.log('Error in use-cases/user.js authUser(): ', err)
       throw err
     }
   }
