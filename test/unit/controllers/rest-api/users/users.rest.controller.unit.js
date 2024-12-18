@@ -74,7 +74,7 @@ describe('#controllers/rest-api/users/controller.js', () => {
 
     it('should return 200 status on success', async () => {
       // Mock dependencies
-      sandbox.stub(uut.useCases.user,'createUserLevel').resolves({
+      sandbox.stub(uut.useCases.user, 'createUserLevel').resolves({
         userData: {
           name: 'test',
           email: 'test@test.com',
