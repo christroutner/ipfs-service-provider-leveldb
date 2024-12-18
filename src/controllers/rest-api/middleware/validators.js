@@ -107,7 +107,8 @@ class Validators {
         throw new Error('Could not verify JWT')
       }
 
-      ctx.state.user = await _this.User.findById(decoded.id, '-password')
+      // ctx.state.user = await _this.User.findById(decoded.id, '-password')
+      ctx.state.user = await this.useCases.user.getUser({ email: decoded.email })
       if (!ctx.state.user) {
         // console.log(`Err: Could not find user.`)
         // ctx.throw(401)
@@ -143,7 +144,7 @@ class Validators {
       }
 
       // The user ID targeted in this API call.
-      const targetId = ctx.params.id
+      const targetId = ctx.params.email
       // console.log(`targetId: ${JSON.stringify(targetId, null, 2)}`)
 
       let decoded = null
@@ -157,7 +158,8 @@ class Validators {
         throw new Error('Could not verify JWT')
       }
 
-      ctx.state.user = await _this.User.findById(decoded.id, '-password')
+      // ctx.state.user = await _this.User.findById(decoded.id, '-password')
+      ctx.state.user = await this.useCases.user.getUser({ email: decoded.email })
       if (!ctx.state.user) {
         // console.log(`Err: Could not find user.`)
         // ctx.throw(401)
@@ -168,9 +170,9 @@ class Validators {
       // console.log(`ctx.state.user: ${JSON.stringify(ctx.state.user, null, 2)}`)
       // Ensure the calling user and the target user are the same.
 
-      if (ctx.state.user._id.toString() !== targetId.toString()) {
+      if (ctx.state.user.email !== targetId.toString()) {
         wlogger.verbose(
-          `Calling user and target user do not match! Calling user: ${ctx.state.user._id}, Target user: ${targetId}`
+          `Calling user and target user do not match! Calling user: ${ctx.state.user.email}, Target user: ${targetId}`
         )
 
         // If they don't match, then the calling user better be an admin.
@@ -185,7 +187,7 @@ class Validators {
       // return next()
       return true
     } catch (error) {
-      // console.log('Error in ensureTargetUserOrAdmin(): ', error)
+      console.log('Error in ensureTargetUserOrAdmin(): ', error)
       ctx.status = 401
       ctx.throw(401, error.message)
     }

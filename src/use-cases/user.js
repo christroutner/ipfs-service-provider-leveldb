@@ -213,7 +213,7 @@ class UserLib {
   async updateUser (existingUser, newData) {
     try {
       // console.log('existingUser: ', existingUser)
-      // console.log('newData: ', newData)
+      console.log('newData: ', newData)
 
       // Input Validation
       // Optional inputs, but they must be strings if included.
@@ -243,18 +243,36 @@ class UserLib {
         }
       }
 
+      // If the user changes the email, then the old user record needs to be
+      // deleted and new one created. This is because email is used as the
+      // key in LevelDB.
+      if (newData.email) {
+        console.log('TODO: delete old user and create new user with new email')
+      }
+
       // Overwrite any existing data with the new data.
       Object.assign(existingUser, newData)
 
+      // Replace the password with a hash
+      const userEntity = await this.hashPassword({ password: newData.password })
+      console.log('userEntity: ', userEntity)
+      existingUser.password = userEntity.password
+      console.log('existingUser: ', existingUser)
+
       // Save the changes to the database.
-      await existingUser.save()
+      // await existingUser.save()
+
+      // Save the user to the database.
+      // Note: Users are looked up by their email. Email addresses must be unique,
+      // e.g. there can not be two users with the same email address.
+      await this.adapters.levelDb.userDb.put(existingUser.email, existingUser)
 
       // Delete the password property.
       delete existingUser.password
 
       return existingUser
     } catch (err) {
-      wlogger.error('Error in lib/users.js/updateUser()')
+      wlogger.error('Error in lib/users.js/updateUser(): ', err)
       throw err
     }
   }

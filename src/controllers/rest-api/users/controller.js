@@ -236,6 +236,7 @@ class UserRESTControllerLib {
   async updateUser (ctx) {
     try {
       const existingUser = ctx.body.user
+      console.log('controller updateUser() existingUser: ', existingUser)
       const newData = ctx.request.body.user
 
       const user = await _this.useCases.user.updateUser(existingUser, newData)

@@ -55,8 +55,8 @@ class UserRouter {
     this.router.post('/', this.userRESTController.createUser)
     this.router.get('/', this.getAll)
     this.router.get('/:email', this.getByEmail)
-    this.router.put('/:id', this.updateUser)
-    this.router.delete('/:id', this.deleteUser)
+    this.router.put('/:email', this.updateUser)
+    this.router.delete('/:email', this.deleteUser)
 
     // Attach the Controller routes to the Koa app.
     app.use(this.router.routes())
