@@ -188,6 +188,8 @@ class UserLib {
       const userDb = this.adapters.levelDb.userDb
       const user = await userDb.get(email)
 
+      delete user.password
+
       // Throw a 404 error if the user isn't found.
       if (!user) {
         const err = new Error('User not found')

@@ -299,96 +299,95 @@ describe('#Users', () => {
     // })
   })
 
-  // describe('GET /users/:id', () => {
-  //   it('should not fetch user if token is invalid', async () => {
-  //     try {
-  //       const options = {
-  //         method: 'GET',
-  //         url: `${LOCALHOST}/users/1`,
-  //         headers: {
-  //           Accept: 'application/json',
-  //           Authorization: 'Bearer 1'
-  //         }
-  //       }
-  //       await axios(options)
-  //
-  //       assert.equal(true, false, 'Unexpected behavior')
-  //     } catch (err) {
-  //       assert.equal(err.response.status, 401)
-  //     }
-  //   })
-  //
-  //   it("should throw 404 if user doesn't exist", async () => {
-  //     const { token } = context
-  //
-  //     try {
-  //       const options = {
-  //         method: 'GET',
-  //         url: `${LOCALHOST}/users/5fa4bd7ee1828f5f4d8ed004`,
-  //         headers: {
-  //           Accept: 'application/json',
-  //           Authorization: `Bearer ${token}`
-  //         }
-  //       }
-  //       await axios(options)
-  //
-  //       assert.equal(true, false, 'Unexpected behavior')
-  //     } catch (err) {
-  //       assert.equal(err.response.status, 404)
-  //     }
-  //   })
-  //
-  //   it('should throw 422 for invalid input', async () => {
-  //     const { token } = context
-  //
-  //     try {
-  //       const options = {
-  //         method: 'GET',
-  //         url: `${LOCALHOST}/users/1`,
-  //         headers: {
-  //           Accept: 'application/json',
-  //           Authorization: `Bearer ${token}`
-  //         }
-  //       }
-  //       await axios(options)
-  //
-  //       assert.equal(true, false, 'Unexpected behavior')
-  //     } catch (err) {
-  //       assert.equal(err.response.status, 422)
-  //     }
-  //   })
-  //
-  //   it('should fetch own user', async () => {
-  //     const _id = context.user._id
-  //     const token = context.token
-  //
-  //     const options = {
-  //       method: 'GET',
-  //       url: `${LOCALHOST}/users/${_id}`,
-  //       headers: {
-  //         Accept: 'application/json',
-  //         Authorization: `Bearer ${token}`
-  //       }
-  //     }
-  //     const result = await axios(options)
-  //
-  //     const user = result.data.user
-  //     // console.log(`user: ${util.inspect(user)}`)
-  //
-  //     assert.property(user, 'type')
-  //     assert.property(user, 'email')
-  //
-  //     assert.property(user, '_id')
-  //     assert.equal(user._id, _id)
-  //
-  //     assert.notProperty(
-  //       user,
-  //       'password',
-  //       'Password property should not be returned'
-  //     )
-  //   })
-  // })
-  //
+  describe('#GET /users/:email', () => {
+    it('should not fetch user if token is invalid', async () => {
+      try {
+        const options = {
+          method: 'GET',
+          url: `${LOCALHOST}/users/1`,
+          headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer 1'
+          }
+        }
+        await axios(options)
+
+        assert.equal(true, false, 'Unexpected behavior')
+      } catch (err) {
+        assert.equal(err.response.status, 401)
+      }
+    })
+
+    it("should throw 404 if user doesn't exist", async () => {
+      const { token } = context
+
+      try {
+        const options = {
+          method: 'GET',
+          url: `${LOCALHOST}/users/test200@test.com`,
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${token}`
+          }
+        }
+        await axios(options)
+
+        assert.equal(true, false, 'Unexpected behavior')
+      } catch (err) {
+        assert.equal(err.response.status, 404)
+      }
+    })
+
+    // it('should throw 422 for invalid input', async () => {
+    //   const { token } = context
+    //
+    //   try {
+    //     const options = {
+    //       method: 'GET',
+    //       url: `${LOCALHOST}/users/test2@test.com`,
+    //       headers: {
+    //         Accept: 'application/json',
+    //         Authorization: `Bearer ${token}`
+    //       }
+    //     }
+    //     await axios(options)
+    //
+    //     assert.equal(true, false, 'Unexpected behavior')
+    //   } catch (err) {
+    //     assert.equal(err.response.status, 422)
+    //   }
+    // })
+
+    it('should fetch own user', async () => {
+      const email = context.user.email
+      const token = context.token
+
+      const options = {
+        method: 'GET',
+        url: `${LOCALHOST}/users/${email}`,
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      }
+      const result = await axios(options)
+
+      const user = result.data.user
+      // console.log(`user: ${util.inspect(user)}`)
+      console.log('user: ', user)
+
+      assert.property(user, 'type')
+      assert.property(user, 'email')
+      assert.property(user, 'id')
+
+      assert.notProperty(
+        user,
+        'password',
+        'Password property should not be returned'
+      )
+    })
+  })
+
   // describe('PUT /users/:id', () => {
   //   it('should not update user if token is invalid', async () => {
   //     try {

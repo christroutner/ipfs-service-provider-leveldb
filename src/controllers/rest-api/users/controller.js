@@ -147,7 +147,7 @@ class UserRESTControllerLib {
   }
 
   /**
-   * @api {get} /users/:id Get user by id
+   * @api {get} /users/:email Get user by email
    * @apiPermission user
    * @apiName GetUser
    * @apiGroup REST Users
