@@ -87,4 +87,4 @@ const levelDb = {
   }
 }
 
-export default { ipfs, localdb };
+export default { ipfs, localdb, levelDb };

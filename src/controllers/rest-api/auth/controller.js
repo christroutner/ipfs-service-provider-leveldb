@@ -42,6 +42,8 @@ class AuthRESTController {
    * @api {post} /auth Authenticate user
    * @apiName AuthUser
    * @apiGroup Auth
+   * @apiDescription Login a user and retrieve a JWT token, used to access
+   * API endpoints that require authentication.
    *
    * @apiParam {String} username  User username.
    * @apiParam {String} password  User password.
@@ -77,9 +79,9 @@ class AuthRESTController {
   async authUser (ctx, next) {
     try {
       console.log('ctx.request.body: ', ctx.request.body)
-      const { username, password } = ctx.request.body
+      const { email, password } = ctx.request.body
 
-      const { token, user } = await this.useCases.user.authUser(username, password)
+      const { token, user } = await this.useCases.user.authUser(email, password)
 
       // If the password was not authenticated, return a 401 error.
       if (!token) {
@@ -92,24 +94,6 @@ class AuthRESTController {
         token,
         user
       }
-
-      // Retrieve the user from the database after they've proven the correct
-      // password.
-      // const user = await _this.passport.authUser(ctx, next)
-      // if (!user) {
-      //   ctx.throw(401)
-      // }
-      //
-      // const token = user.generateToken()
-      //
-      // const response = user.toJSON()
-      //
-      // delete response.password
-      //
-      // ctx.body = {
-      //   token,
-      //   user: response
-      // }
     } catch (err) {
       ctx.throw(401)
     }

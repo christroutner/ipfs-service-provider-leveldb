@@ -105,7 +105,7 @@ describe('#Auth', () => {
           }
         }
         const result = await axios(options)
-        // console.log(`result: ${JSON.stringify(result.data, null, 2)}`)
+        console.log(`result: ${JSON.stringify(result.data, null, 2)}`)
 
         assert(result.status === 200, 'Status Code 200 expected.')
         assert(
@@ -116,6 +116,7 @@ describe('#Auth', () => {
           result.data.user.password === undefined,
           'Password expected to be omited'
         )
+        assert.property(result.data, 'token', 'JWT token should be returned')
       } catch (err) {
         console.log(
           'Error authenticating test user: ' + JSON.stringify(err, null, 2)

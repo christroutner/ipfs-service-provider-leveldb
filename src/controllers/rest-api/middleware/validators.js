@@ -23,7 +23,22 @@ import wlogger from '../../../adapters/wlogger.js'
 let _this
 
 class Validators {
-  constructor () {
+  constructor (localConfig = {}) {
+    // Dependency Injection.
+    this.adapters = localConfig.adapters
+    if (!this.adapters) {
+      throw new Error(
+        'Instance of Adapters library required when instantiating Validators middleware.'
+      )
+    }
+    this.useCases = localConfig.useCases
+    if (!this.useCases) {
+      throw new Error(
+        'Instance of Use Cases library required when instantiating Validators middleware.'
+      )
+    }
+
+    // Encapsulate dependencies
     this.User = User
     this.jwt = jwt
     this.config = config
@@ -33,6 +48,7 @@ class Validators {
 
   async ensureUser (ctx, next) {
     try {
+      console.log('ensureUser() called')
       const token = _this.getToken(ctx)
 
       if (!token) {
@@ -44,11 +60,13 @@ class Validators {
         // console.log(`token: ${JSON.stringify(token, null, 2)}`)
         // console.log(`config: ${JSON.stringify(config, null, 2)}`)
         decoded = _this.jwt.verify(token, config.token)
+        console.log('decoded: ', decoded)
       } catch (err) {
         throw new Error('Could not verify JWT')
       }
 
-      ctx.state.user = await _this.User.findById(decoded.id, '-password')
+      // ctx.state.user = await _this.User.findById(decoded.id, '-password')
+      ctx.state.user = await this.useCases.user.getUser({ email: decoded.email })
 
       if (!ctx.state.user) {
         // console.log('Err: Could not find user.')
@@ -58,7 +76,7 @@ class Validators {
       // return next()
       return true
     } catch (error) {
-      // console.log('Ensure user error: ', error)
+      console.log('Ensure user error: ', error)
       // console.log('ctx: ', ctx)
       ctx.status = 401
       ctx.throw(401, error.message)

@@ -40,6 +40,7 @@ class UserLib {
     this.generateToken = this.generateToken.bind(this)
     this.hashPassword = this.hashPassword.bind(this)
     this.validatePassword = this.validatePassword.bind(this)
+    this.getAllUsersLevel = this.getAllUsersLevel.bind(this)
   }
 
   // DEPRECATED
@@ -123,6 +124,7 @@ class UserLib {
   // Returns an array of all user models in the User level database.
   async getAllUsersLevel () {
     try {
+      console.log('getAllUsersLevel() called')
       const users = []
 
       const userDb = this.adapters.levelDb.userDb
@@ -180,11 +182,11 @@ class UserLib {
   // Get the model for a specific user.
   async getUser (params) {
     try {
-      const { id } = params
+      const { email } = params
 
       // const user = await this.UserModel.findById(id, '-password')
       const userDb = this.adapters.levelDb.userDb
-      const user = await userDb.get(id)
+      const user = await userDb.get(email)
 
       // Throw a 404 error if the user isn't found.
       if (!user) {
@@ -321,7 +323,7 @@ class UserLib {
     try {
       const { user } = inObj
 
-      const token = jwt.sign({ id: user.id }, this.config.token)
+      const token = jwt.sign({ email: user.email }, this.config.token)
       // console.log(`config.token: ${config.token}`)
       // console.log(`generated token: ${token}`)
       return token

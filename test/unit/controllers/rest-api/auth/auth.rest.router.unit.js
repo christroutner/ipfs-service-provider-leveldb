@@ -22,7 +22,7 @@ let sandbox
 
 // const mockContext = require('../../../../unit/mocks/ctx-mock').context
 
-describe('#Auth-REST-Router', () => {
+describe('#controllers/rest-api/auth/auth.rest.router.js', () => {
   // const testUser = {}
 
   beforeEach(() => {

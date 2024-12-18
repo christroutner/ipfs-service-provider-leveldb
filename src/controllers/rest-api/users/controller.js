@@ -90,6 +90,8 @@ class UserRESTControllerLib {
 
       const { userData, token } = await this.useCases.user.createUserLevel(userObj)
 
+      delete userData.password
+
       ctx.body = {
         user: userData,
         token
@@ -132,6 +134,7 @@ class UserRESTControllerLib {
    */
   async getUsers (ctx) {
     try {
+      console.log('controller getUsers() called')
       // const users = await _this.useCases.user.getAllUsers()
 
       const users = await this.useCases.user.getAllUsersLevel()
@@ -150,7 +153,7 @@ class UserRESTControllerLib {
    * @apiGroup REST Users
    *
    * @apiExample Example usage:
-   * curl -H "Content-Type: application/json" -X GET localhost:5010/users/56bd1da600a526986cf65c80
+   * curl -H "Content-Type: application/json" -X GET localhost:5020/users/email@format.com
    *
    * @apiSuccess {Object}   users           User object
    * @apiSuccess {ObjectId} users._id       User id

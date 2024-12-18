@@ -22,7 +22,7 @@ let uut
 let sandbox
 let ctx
 
-describe('#Auth-REST-Router', () => {
+describe('#controllers/rest-api/auth/auth.rest.controller.unit.js', () => {
   // const testUser = {}
 
   beforeEach(() => {
@@ -67,16 +67,22 @@ describe('#Auth-REST-Router', () => {
 
   describe('#authUser', () => {
     it('should authorize a user', async () => {
-      // Mock dependencies
-      const user = {
-        toJSON: () => {
-          return { password: 'password' }
-        },
-        generateToken: () => {}
+      ctx.request.body = {
+        username: 'test@test.com',
+        password: 'password'
       }
-      sandbox.stub(uut.passport, 'authUser').resolves(user)
+
+      // Mock dependencies
+      sandbox.stub(uut.useCases.user, 'authUser').resolves({
+        token: 'fake-token',
+        user: {}
+      })
 
       await uut.authUser(ctx)
+
+      assert.property(ctx.body, 'user')
+      assert.property(ctx.body, 'token')
+      assert.equal(ctx.body.token, 'fake-token')
     })
 
     it('should catch and throw an error', async () => {

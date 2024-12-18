@@ -172,7 +172,7 @@ describe('#users-use-case', () => {
   })
 
   describe('#getUser', () => {
-    it('should throw 422 if no id given.', async () => {
+    it('should throw 422 if no email is provided.', async () => {
       try {
         await uut.getUser()
 
@@ -184,14 +184,14 @@ describe('#users-use-case', () => {
       }
     })
 
-    it('should throw 422 for malformed id', async () => {
+    it('should throw 422 for malformed email', async () => {
       try {
         // Force an error.
-        sandbox
-          .stub(uut.UserModel, 'findById')
-          .rejects(new Error('Unprocessable Entity'))
+        // sandbox
+        //   .stub(uut.UserModel, 'findById')
+        //   .rejects(new Error('Unprocessable Entity'))
 
-        const params = { id: 1 }
+        const params = { email: 1 }
         await uut.getUser(params)
 
         assert.fail('Unexpected code path.')
