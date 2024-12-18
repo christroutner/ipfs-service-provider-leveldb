@@ -89,6 +89,8 @@ class UserRESTControllerLib {
       //
 
       const { userData, token } = await this.useCases.user.createUserLevel(userObj)
+      // console.log('userData: ', userData)
+      // console.log('token: ', token)
 
       delete userData.password
 
