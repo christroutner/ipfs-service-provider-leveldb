@@ -48,7 +48,7 @@ class Validators {
 
   async ensureUser (ctx, next) {
     try {
-      console.log('ensureUser() called')
+      // console.log('ensureUser() called')
       const token = _this.getToken(ctx)
 
       if (!token) {
@@ -145,7 +145,7 @@ class Validators {
 
       // The user ID targeted in this API call.
       const targetId = ctx.params.email
-      // console.log(`targetId: ${JSON.stringify(targetId, null, 2)}`)
+      console.log(`targetId: ${JSON.stringify(targetId, null, 2)}`)
 
       let decoded = null
       try {
