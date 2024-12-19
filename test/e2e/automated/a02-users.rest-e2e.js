@@ -705,16 +705,16 @@ describe('#Users', () => {
           }
         }
         await axios(options)
-  
+
         assert.equal(true, false, 'Unexpected behavior')
       } catch (err) {
         assert.equal(err.response.status, 401)
       }
     })
-  
+
     it('should throw 401 if deleting invalid user', async () => {
       const { token } = context
-  
+
       try {
         const options = {
           method: 'DELETE',
@@ -725,13 +725,13 @@ describe('#Users', () => {
           }
         }
         await axios(options)
-  
+
         assert.equal(true, false, 'Unexpected behavior')
       } catch (err) {
         assert.equal(err.response.status, 401)
       }
     })
-  
+
     it('should not be able to delete other users unless admin', async () => {
       try {
         const options = {
@@ -746,11 +746,11 @@ describe('#Users', () => {
         assert.equal(err.response.status, 401)
       }
     })
-  
+
     it('should delete own user', async () => {
       const email = context.user.email
       const token = context.token
-  
+
       const options = {
         method: 'DELETE',
         url: `${LOCALHOST}/users/${email}`,
@@ -761,14 +761,14 @@ describe('#Users', () => {
       }
       const result = await axios(options)
       // console.log(`result: ${util.inspect(result.data.success)}`)
-  
+
       assert.equal(result.data.success, true)
     })
-  
+
     it('should be able to delete other users when admin', async () => {
       const email2 = context.email2
       const adminJWT = context.adminJWT
-  
+
       const options = {
         method: 'DELETE',
         url: `${LOCALHOST}/users/${email2}`,
@@ -779,7 +779,7 @@ describe('#Users', () => {
       }
       const result = await axios(options)
       // console.log(`result: ${util.inspect(result.data)}`)
-  
+
       assert.equal(result.data.success, true)
     })
   })

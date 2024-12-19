@@ -406,7 +406,6 @@ describe('#users-use-case', () => {
     })
 
     it('should delete the user from the database', async () => {
-
       const testUser = {
         name: 'test2',
         email: 'test2@test.com',

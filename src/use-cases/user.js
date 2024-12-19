@@ -276,7 +276,7 @@ class UserLib {
 
   async deleteUser (user) {
     try {
-      if(!user.email) {
+      if (!user.email) {
         throw new Error('User email not provided.')
       }
 
