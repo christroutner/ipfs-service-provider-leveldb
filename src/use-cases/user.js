@@ -213,7 +213,7 @@ class UserLib {
   async updateUser (existingUser, newData) {
     try {
       // console.log('existingUser: ', existingUser)
-      console.log('newData: ', newData)
+      // console.log('newData: ', newData)
 
       // Input Validation
       // Optional inputs, but they must be strings if included.
@@ -255,12 +255,9 @@ class UserLib {
 
       // Replace the password with a hash
       const userEntity = await this.hashPassword({ password: newData.password })
-      console.log('userEntity: ', userEntity)
+      // console.log('userEntity: ', userEntity)
       existingUser.password = userEntity.password
-      console.log('existingUser: ', existingUser)
-
-      // Save the changes to the database.
-      // await existingUser.save()
+      // console.log('existingUser: ', existingUser)
 
       // Save the user to the database.
       // Note: Users are looked up by their email. Email addresses must be unique,
@@ -279,7 +276,16 @@ class UserLib {
 
   async deleteUser (user) {
     try {
-      await user.remove()
+      if(!user.email) {
+        throw new Error('User email not provided.')
+      }
+
+      console.log('deleteUser() user: ', user)
+
+      // Delete the user from the database.
+      await this.adapters.levelDb.userDb.del(user.email)
+
+      return true
     } catch (err) {
       wlogger.error('Error in lib/users.js/deleteUser()')
       throw err

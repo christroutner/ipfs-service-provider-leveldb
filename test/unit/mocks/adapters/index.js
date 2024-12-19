@@ -83,7 +83,9 @@ const levelDb = {
     return true
   },
   userDb: {
-    get: async () => {}
+    get: async () => {},
+    del: async () => {},
+    put: async () => {}
   }
 }
 

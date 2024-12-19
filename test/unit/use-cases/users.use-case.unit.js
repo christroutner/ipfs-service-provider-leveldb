@@ -406,7 +406,14 @@ describe('#users-use-case', () => {
     })
 
     it('should delete the user from the database', async () => {
-      testUser = new adapters.localdb.Users()
+
+      const testUser = {
+        name: 'test2',
+        email: 'test2@test.com',
+        id: 'b4e23f27-a00f-4ea8-895d-715e667d0d75',
+        type: 'user',
+        token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQHRlc3QuY29tIiwiaWF0IjoxNzM0NjQyMDIyfQ.0y6Smu-vCAFopYeBj_8FuS-YIF14yubMtrvV8GVv2Vs'
+      }
 
       await uut.deleteUser(testUser)
 

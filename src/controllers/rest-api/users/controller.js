@@ -238,7 +238,7 @@ class UserRESTControllerLib {
   async updateUser (ctx) {
     try {
       const existingUser = ctx.body.user
-      console.log('controller updateUser() existingUser: ', existingUser)
+      // console.log('controller updateUser() existingUser: ', existingUser)
       const newData = ctx.request.body.user
 
       const user = await _this.useCases.user.updateUser(existingUser, newData)
@@ -258,7 +258,7 @@ class UserRESTControllerLib {
    * @apiGroup REST Users
    *
    * @apiExample Example usage:
-   * curl -H "Content-Type: application/json" -X DELETE localhost:5000/users/56bd1da600a526986cf65c80
+   * curl -H "Content-Type: application/json" -X DELETE localhost:5020/users/email@format.com
    *
    * @apiSuccess {StatusCode} 200
    *

@@ -10,7 +10,7 @@ import level from 'level'
 import * as url from 'url'
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 
-const userDb = level(`${__dirname.toString()}/../../leveldb-data/current/users`, {
+const userDb = level(`${__dirname.toString()}/../../leveldb-data/current/dev/users`, {
   valueEncoding: 'json'
 })
 
