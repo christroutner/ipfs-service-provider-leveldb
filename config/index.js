@@ -8,10 +8,13 @@ const env = process.env.SVC_ENV || 'development'
 console.log(`Loading config for this environment: ${env}`)
 
 let config = development
-if (env === 'test') {
+if (env.includes('test')) {
   config = test
-} else if (env === 'prod') {
+} else if (env.includes('prod')) {
   config = production
 }
 
-export default Object.assign({}, common, config)
+const finalConfig = Object.assign({}, common, config)
+// console.log('finalConfig: ', finalConfig)
+
+export default finalConfig

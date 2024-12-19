@@ -46,18 +46,18 @@ class Server {
       const app = new Koa()
       app.keys = [this.config.session]
 
-      if (!this.config.noMongo) {
-        // Connect to the Mongo Database.
-        this.mongoose.Promise = global.Promise
-        this.mongoose.set('useCreateIndex', true) // Stop deprecation warning.
-        console.log(
-          `Connecting to MongoDB with this connection string: ${this.config.database}`
-        )
-        await this.mongoose.connect(this.config.database, {
-          useUnifiedTopology: true,
-          useNewUrlParser: true
-        })
-      }
+      // if (!this.config.noMongo) {
+      //   // Connect to the Mongo Database.
+      //   this.mongoose.Promise = global.Promise
+      //   this.mongoose.set('useCreateIndex', true) // Stop deprecation warning.
+      //   console.log(
+      //     `Connecting to MongoDB with this connection string: ${this.config.database}`
+      //   )
+      //   await this.mongoose.connect(this.config.database, {
+      //     useUnifiedTopology: true,
+      //     useNewUrlParser: true
+      //   })
+      // }
 
       console.log(`Starting environment: ${this.config.env}`)
       console.log(`Debug level: ${this.config.debugLevel}`)

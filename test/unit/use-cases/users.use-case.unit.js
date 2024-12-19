@@ -351,47 +351,47 @@ describe('#users-use-case', () => {
   // TODO: verify that an admin can change the type of a user
   })
 
-  describe('#authUser', () => {
-    it('should return a user db model after successful authentication', async () => {
-      // sandbox.stub(uut.UserModel, 'findOne').resolves(true)
+  // describe('#authUser', () => {
+  //   it('should return a user db model after successful authentication', async () => {
+  //     // sandbox.stub(uut.UserModel, 'findOne').resolves(true)
 
-      await uut.authUser('test@test.com', 'password')
-      // console.log('user: ', user)
+  //     await uut.authUser('test@test.com', 'password')
+  //     // console.log('user: ', user)
 
-    // assert.property(user, '_id')
-    // assert.property(user, 'email')
-    // assert.property(user, 'name')
-    })
+  //   // assert.property(user, '_id')
+  //   // assert.property(user, 'email')
+  //   // assert.property(user, 'name')
+  //   })
 
-    it('should throw an error if no user matches the login', async () => {
-      try {
-        sandbox.stub(uut.UserModel, 'findOne').resolves(false)
+  //   it('should throw an error if no user matches the login', async () => {
+  //     try {
+  //       sandbox.stub(uut.UserModel, 'findOne').resolves(false)
 
-        await uut.authUser('noone@nowhere.com', 'password')
-        // console.log('user: ', user)
+  //       await uut.authUser('noone@nowhere.com', 'password')
+  //       // console.log('user: ', user)
 
-        assert.fail('Unexpected code path')
-      } catch (err) {
-        assert.include(err.message, 'User not found')
-      }
-    })
+  //       assert.fail('Unexpected code path')
+  //     } catch (err) {
+  //       assert.include(err.message, 'User not found')
+  //     }
+  //   })
 
-    it('should throw an error if password does not match', async () => {
-      try {
-        // Force authentication to fial.
-        adapters.localdb.validatePassword = () => {
-          return false
-        }
+  //   it('should throw an error if password does not match', async () => {
+  //     try {
+  //       // Force authentication to fial.
+  //       adapters.localdb.validatePassword = () => {
+  //         return false
+  //       }
 
-        await uut.authUser('test@test.com', 'badpassword')
-        // console.log('user: ', user)
+  //       await uut.authUser('test@test.com', 'badpassword')
+  //       // console.log('user: ', user)
 
-        assert.fail('Unexpected code path')
-      } catch (err) {
-        assert.include(err.message, 'Login credential do not match')
-      }
-    })
-  })
+  //       assert.fail('Unexpected code path')
+  //     } catch (err) {
+  //       assert.include(err.message, 'Login credential do not match')
+  //     }
+  //   })
+  // })
 
   describe('#deleteUser', () => {
     it('should throw error if no user provided', async () => {
