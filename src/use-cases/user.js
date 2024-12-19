@@ -24,14 +24,13 @@ class UserLib {
 
     // Encapsulate dependencies
     this.UserEntity = new UserEntity()
-    this.UserModel = this.adapters.localdb.Users
+    // this.UserModel = this.adapters.localdb.Users
     this.jwt = jwt
     this.config = config
     this.bcrypt = bcrypt
 
     // Bind 'this' object to all subfunctions
     this.createUser = this.createUser.bind(this)
-    this.createUserLevel = this.createUserLevel.bind(this)
     this.getAllUsers = this.getAllUsers.bind(this)
     this.getUser = this.getUser.bind(this)
     this.updateUser = this.updateUser.bind(this)
@@ -40,45 +39,44 @@ class UserLib {
     this.generateToken = this.generateToken.bind(this)
     this.hashPassword = this.hashPassword.bind(this)
     this.validatePassword = this.validatePassword.bind(this)
-    this.getAllUsersLevel = this.getAllUsersLevel.bind(this)
   }
 
   // DEPRECATED
   // Create a new user model and add it to the Mongo database.
-  async createUser (userObj) {
-    try {
-      // Input Validation
+  // async createUser (userObj) {
+  //   try {
+  //     // Input Validation
 
-      const userEntity = this.UserEntity.validate(userObj)
-      const user = new this.UserModel(userEntity)
+  //     const userEntity = this.UserEntity.validate(userObj)
+  //     const user = new this.UserModel(userEntity)
 
-      // Enforce default value of 'user'
-      user.type = 'user'
-      // console.log('user: ', user)
+  //     // Enforce default value of 'user'
+  //     user.type = 'user'
+  //     // console.log('user: ', user)
 
-      // Save the new user model to the database.
-      await user.save()
+  //     // Save the new user model to the database.
+  //     await user.save()
 
-      // Generate a JWT token for the user.
-      const token = user.generateToken()
+  //     // Generate a JWT token for the user.
+  //     const token = user.generateToken()
 
-      // Convert the database model to a JSON object.
-      const userData = user.toJSON()
-      // console.log('userData: ', userData)
+  //     // Convert the database model to a JSON object.
+  //     const userData = user.toJSON()
+  //     // console.log('userData: ', userData)
 
-      // Delete the password property.
-      delete userData.password
+  //     // Delete the password property.
+  //     delete userData.password
 
-      return { userData, token }
-    } catch (err) {
-      // console.log('createUser() error: ', err)
-      wlogger.error('Error in lib/users.js/createUser()')
-      throw err
-    }
-  }
+  //     return { userData, token }
+  //   } catch (err) {
+  //     // console.log('createUser() error: ', err)
+  //     wlogger.error('Error in lib/users.js/createUser()')
+  //     throw err
+  //   }
+  // }
 
   // createUser() but using LevelDB.
-  async createUserLevel (userObj) {
+  async createUser (userObj) {
     try {
       // Input Validation
       let userEntity = this.UserEntity.validate(userObj)
@@ -108,21 +106,8 @@ class UserLib {
     }
   }
 
-  // Returns an array of all user models in the Mongo database.
-  async getAllUsers () {
-    try {
-      // Get all user models. Delete the password property from each model.
-      const users = await this.UserModel.find({}, '-password')
-
-      return users
-    } catch (err) {
-      wlogger.error('Error in lib/users.js/getAllUsers()')
-      throw err
-    }
-  }
-
   // Returns an array of all user models in the User level database.
-  async getAllUsersLevel () {
+  async getAllUsers () {
     try {
       console.log('getAllUsersLevel() called')
       const users = []

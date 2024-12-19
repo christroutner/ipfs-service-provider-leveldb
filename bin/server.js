@@ -15,7 +15,7 @@ import convert from 'koa-convert'
 import logger from 'koa-logger'
 import mongoose from 'mongoose'
 import session from 'koa-generic-session'
-import passport from 'koa-passport'
+// import passport from 'koa-passport'
 import mount from 'koa-mount'
 import serve from 'koa-static'
 import cors from 'kcors'
@@ -28,7 +28,7 @@ import errorMiddleware from '../src/controllers/rest-api/middleware/error.js'
 import { usageMiddleware } from '../src/use-cases/usage-use-cases.js'
 import wlogger from '../src/adapters/wlogger.js'
 import Controllers from '../src/controllers/index.js'
-import { applyPassportMods } from '../config/passport.js'
+// import { applyPassportMods } from '../config/passport.js'
 
 class Server {
   constructor () {
@@ -78,9 +78,9 @@ class Server {
 
       // User Authentication
       // require('../config/passport')
-      applyPassportMods(passport)
-      app.use(passport.initialize())
-      app.use(passport.session())
+      // applyPassportMods(passport)
+      // app.use(passport.initialize())
+      // app.use(passport.session())
 
       // Enable CORS for testing
       // THIS IS A SECURITY RISK. COMMENT OUT FOR PRODUCTION

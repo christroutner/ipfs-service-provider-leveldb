@@ -24,7 +24,7 @@ class Validators {
     // Encapsulate dependencies
     this.config = config
     this.jwt = jwt
-    this.UserModel = this.adapters.localdb.Users
+    // this.UserModel = this.adapters.localdb.Users
   }
 
   // Returns if user passes a valid JWT token that resolves to a valid user.

@@ -14,7 +14,7 @@
   this refactor did not result in any breaking changes.
 */
 
-import User from '../../../adapters/localdb/models/users.js'
+// import User from '../../../adapters/localdb/models/users.js'
 
 import config from '../../../../config/index.js'
 import jwt from 'jsonwebtoken'
@@ -39,7 +39,7 @@ class Validators {
     }
 
     // Encapsulate dependencies
-    this.User = User
+    // this.User = User
     this.jwt = jwt
     this.config = config
 

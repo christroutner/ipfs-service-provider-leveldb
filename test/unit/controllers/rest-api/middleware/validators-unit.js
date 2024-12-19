@@ -109,7 +109,7 @@ describe('#Validators', () => {
       // Mock dependencies and force desired code path
       sandbox.stub(uut, 'getToken').returns('fake-jwt')
       sandbox.stub(uut.jwt, 'verify').returns({})
-      sandbox.stub(uut.User, 'findById').resolves({ user: 'alice' })
+      // sandbox.stub(uut.User, 'findById').resolves({ user: 'alice' })
 
       const result = await uut.ensureUser(ctx)
 
@@ -150,7 +150,7 @@ describe('#Validators', () => {
         // Mock dependencies and force desired code path
         sandbox.stub(uut, 'getToken').returns('fake-jwt')
         sandbox.stub(uut.jwt, 'verify').returns({})
-        sandbox.stub(uut.User, 'findById').resolves(false)
+        // sandbox.stub(uut.User, 'findById').resolves(false)
 
         await uut.ensureAdmin(ctx)
 
@@ -165,7 +165,7 @@ describe('#Validators', () => {
         // Mock dependencies and force desired code path
         sandbox.stub(uut, 'getToken').returns('fake-jwt')
         sandbox.stub(uut.jwt, 'verify').returns({})
-        sandbox.stub(uut.User, 'findById').resolves({ type: 'user' })
+        // sandbox.stub(uut.User, 'findById').resolves({ type: 'user' })
 
         await uut.ensureAdmin(ctx)
 
@@ -224,7 +224,7 @@ describe('#Validators', () => {
         // Mock dependencies and force desired code path
         sandbox.stub(uut, 'getToken').returns('fake-jwt')
         sandbox.stub(uut.jwt, 'verify').returns({})
-        sandbox.stub(uut.User, 'findById').resolves(false)
+        // sandbox.stub(uut.User, 'findById').resolves(false)
 
         ctx.params = {
           id: '456'
@@ -243,7 +243,7 @@ describe('#Validators', () => {
         // Mock dependencies and force desired code path
         sandbox.stub(uut, 'getToken').returns('fake-jwt')
         sandbox.stub(uut.jwt, 'verify').returns({})
-        sandbox.stub(uut.User, 'findById').resolves({ type: 'user' })
+        // sandbox.stub(uut.User, 'findById').resolves({ type: 'user' })
 
         ctx.params = {
           id: '456'
@@ -262,7 +262,7 @@ describe('#Validators', () => {
         // Mock dependencies and force desired code path
         sandbox.stub(uut, 'getToken').returns('fake-jwt')
         sandbox.stub(uut.jwt, 'verify').returns({})
-        sandbox.stub(uut.User, 'findById').resolves({ type: 'user', _id: '123' })
+        // sandbox.stub(uut.User, 'findById').resolves({ type: 'user', _id: '123' })
 
         ctx.params = {
           id: '456'

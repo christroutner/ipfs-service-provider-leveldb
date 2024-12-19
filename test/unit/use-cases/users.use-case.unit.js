@@ -104,7 +104,7 @@ describe('#users-use-case', () => {
     it('should catch and throw DB errors', async () => {
       try {
         // Force an error with the database.
-        sandbox.stub(uut, 'UserModel').throws(new Error('test error'))
+        sandbox.stub(uut.adapters.levelDb.userDb, 'put').rejects(new Error('test error'))
 
         const usrObj = {
           email: 'test@test.com',
@@ -145,7 +145,7 @@ describe('#users-use-case', () => {
 
       // Assert that the JWT token was generated for this user.
       assert.isString(token)
-      assert.include(token, '123')
+      assert.include(token, 'eyJh')
     })
   })
 
@@ -160,7 +160,7 @@ describe('#users-use-case', () => {
     it('should catch and throw an error', async () => {
       try {
         // Force an error.
-        sandbox.stub(uut.UserModel, 'find').rejects(new Error('test error'))
+        sandbox.stub(uut.adapters.levelDb.userDb, 'createReadStream').throws(new Error('test error'))
 
         await uut.getAllUsers()
 
