@@ -22,17 +22,26 @@ class LevelDb {
     // Bind 'this' object to all subfunctions.
     this.openDbs = this.openDbs.bind(this)
     this.closeDbs = this.closeDbs.bind(this)
+
+    // State
+    this.userDb = null // placeholder
   }
 
   // Open the Level databases. This function should be calld on startup.
   openDbs () {
     try {
+      // If the database is already open, exit by returning the existing dbs.
+      if (this.userDb) {
+        return {
+          userDb: this.userDb
+        }
+      }
+
+      // Open the databases
       this.userDb = this.level(`${__dirname.toString()}/../../../leveldb-data/current/${this.config.database}/users`, {
         valueEncoding: 'json',
         cacheSize: 1024 * 1024 * 10 // 10 MB
       })
-
-      console.log('All Level Databases loaded.')
 
       return {
         userDb: this.userDb
