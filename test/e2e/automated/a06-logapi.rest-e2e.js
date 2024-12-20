@@ -48,6 +48,7 @@ describe('LogsApi', () => {
         }
 
         const result = await axios(options)
+        console.log('result.data: ', result.data)
 
         assert.isTrue(result.data.success)
         assert.isArray(result.data.data)
