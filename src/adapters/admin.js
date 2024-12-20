@@ -15,7 +15,7 @@
 
 // Global npm libraries
 import axios from 'axios'
-import mongoose from 'mongoose'
+// import mongoose from 'mongoose'
 
 // Local libraries
 // import User from '../adapters/localdb/models/users.js'
@@ -108,10 +108,10 @@ class Admin {
       if (err.response && err.response.status === 422) {
         try {
           // Delete the existing user
-          await _this.deleteExistingSystemUser()
+          await _this.deleteExistingSystemUser(inObj)
 
           // Call this function again.
-          return _this.createSystemUser()
+          return _this.createSystemUser(inObj)
         } catch (err2) {
           console.error(
             'Error in admin.js/createSystemUser() while trying generate new system user.'
@@ -127,17 +127,21 @@ class Admin {
     }
   }
 
-  async deleteExistingSystemUser () {
+  async deleteExistingSystemUser (inObj = {}) {
     try {
-      mongoose.Promise = global.Promise
-      mongoose.set('useCreateIndex', true) // Stop deprecation warning.
+      // mongoose.Promise = global.Promise
+      // mongoose.set('useCreateIndex', true) // Stop deprecation warning.
 
-      await mongoose.connect(config.database, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-      })
+      // await mongoose.connect(config.database, {
+      //   useNewUrlParser: true,
+      //   useUnifiedTopology: true
+      // })
 
-      await _this.User.deleteOne({ email: 'system@system.com' })
+      // await _this.User.deleteOne({ email: 'system@system.com' })
+
+      const { adapters } = inObj
+
+      await adapters.levelDb.userDb.del('system@system.com')
     } catch (err) {
       console.log('Error in admin.js/deleteExistingSystemUser()')
       throw err

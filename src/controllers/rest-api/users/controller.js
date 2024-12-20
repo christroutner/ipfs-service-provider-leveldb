@@ -23,7 +23,7 @@ class UserRESTControllerLib {
     }
 
     // Encapsulate dependencies
-    this.UserModel = this.adapters.localdb.Users
+    // this.UserModel = this.adapters.localdb.Users
     // this.userUseCases = this.useCases.user
 
     _this = this
@@ -88,7 +88,7 @@ class UserRESTControllerLib {
       // // console.log('token: ', token)
       //
 
-      const { userData, token } = await this.useCases.user.createUserLevel(userObj)
+      const { userData, token } = await this.useCases.user.createUser(userObj)
       // console.log('userData: ', userData)
       // console.log('token: ', token)
 
@@ -99,7 +99,7 @@ class UserRESTControllerLib {
         token
       }
     } catch (err) {
-      // console.log(`err.message: ${err.message}`)
+      console.log(`err.message: ${err.message}`)
       // console.log('err: ', err)
       // ctx.throw(422, err.message)
       this.handleError(ctx, err)
@@ -139,7 +139,7 @@ class UserRESTControllerLib {
       console.log('controller getUsers() called')
       // const users = await _this.useCases.user.getAllUsers()
 
-      const users = await this.useCases.user.getAllUsersLevel()
+      const users = await this.useCases.user.getAllUsers()
 
       ctx.body = { users }
     } catch (err) {

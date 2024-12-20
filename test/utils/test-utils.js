@@ -3,12 +3,12 @@
 */
 
 // Public NPM libraries
-import mongoose from 'mongoose'
+// import mongoose from 'mongoose'
 import axios from 'axios'
 
 // Local libraries
 import config from '../../config/index.js'
-import User from '../../src/adapters/localdb/models/users.js'
+// import User from '../../src/adapters/localdb/models/users.js'
 import JsonFiles from '../../src/adapters/json-files.js'
 
 // Hack to get __dirname back.
@@ -21,35 +21,35 @@ const LOCALHOST = `http://localhost:${config.port}`
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 
 // Remove all collections from the DB.
-async function cleanDb () {
-  for (const collection in mongoose.connection.collections) {
-    const collections = mongoose.connection.collections
-    if (collections.collection) {
-      // const thisCollection = mongoose.connection.collections[collection]
-      // console.log(`thisCollection: ${JSON.stringify(thisCollection, null, 2)}`)
+// async function cleanDb () {
+//   for (const collection in mongoose.connection.collections) {
+//     const collections = mongoose.connection.collections
+//     if (collections.collection) {
+//       // const thisCollection = mongoose.connection.collections[collection]
+//       // console.log(`thisCollection: ${JSON.stringify(thisCollection, null, 2)}`)
 
-      await collection.deleteMany()
-    }
-  }
-}
+//       await collection.deleteMany()
+//     }
+//   }
+// }
 
 // Delete all users in the database. This ensures there is no previous state
 // to confuse tests.
-async function deleteAllUsers () {
-  try {
-    // Get all the users in the DB.
-    const users = await User.find({}, '-password')
-    // console.log(`users: ${JSON.stringify(users, null, 2)}`)
+// async function deleteAllUsers () {
+//   try {
+//     // Get all the users in the DB.
+//     const users = await User.find({}, '-password')
+//     // console.log(`users: ${JSON.stringify(users, null, 2)}`)
 
-    // Delete each user.
-    for (let i = 0; i < users.length; i++) {
-      const thisUser = users[i]
-      await thisUser.remove()
-    }
-  } catch (err) {
-    console.error('Error in test-utils.js/deleteAllUsers()')
-  }
-}
+//     // Delete each user.
+//     for (let i = 0; i < users.length; i++) {
+//       const thisUser = users[i]
+//       await thisUser.remove()
+//     }
+//   } catch (err) {
+//     console.error('Error in test-utils.js/deleteAllUsers()')
+//   }
+// }
 
 // This function is used to create new users.
 // userObj = {
@@ -172,10 +172,10 @@ async function getAdminJWT () {
 }
 
 export default {
-  cleanDb,
+  // cleanDb,
   createUser,
   loginTestUser,
   loginAdminUser,
-  getAdminJWT,
-  deleteAllUsers
+  getAdminJWT
+  // deleteAllUsers
 }

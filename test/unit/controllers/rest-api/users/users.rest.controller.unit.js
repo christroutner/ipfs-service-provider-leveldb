@@ -74,7 +74,7 @@ describe('#controllers/rest-api/users/controller.js', () => {
 
     it('should return 200 status on success', async () => {
       // Mock dependencies
-      sandbox.stub(uut.useCases.user, 'createUserLevel').resolves({
+      sandbox.stub(uut.useCases.user, 'createUser').resolves({
         userData: {
           name: 'test',
           email: 'test@test.com',
@@ -114,7 +114,7 @@ describe('#controllers/rest-api/users/controller.js', () => {
       try {
         // Force an error
         sandbox
-          .stub(uut.useCases.user, 'getAllUsersLevel')
+          .stub(uut.useCases.user, 'getAllUsers')
           .rejects(new Error('test error'))
 
         await uut.getUsers(ctx)
