@@ -75,4 +75,33 @@ const localdb = {
   }
 }
 
-export default { ipfs, localdb };
+const levelDb = {
+  openDbs: () => {
+    return true
+  },
+  closeDbs: () => {
+    return true
+  },
+  userDb: {
+    get: async () => {},
+    del: async () => {},
+    put: async () => {},
+    createReadStream: () => {
+      return {
+        on: (a,b) => {
+          // console.log('on() called with a: ', a)
+          // console.log('on() called with b: ', b)
+
+          if(a.includes('data')) {
+            // console.log('data detected')
+            return b({key: 'a', value: 'b'})
+          }
+
+          b()
+        }
+      }
+    }
+  }
+}
+
+export default { ipfs, localdb, levelDb };

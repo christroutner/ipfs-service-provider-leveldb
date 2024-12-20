@@ -49,11 +49,11 @@ RUN npm set registry http://94.130.170.209:4873/
 
 # Clone the rest.bitcoin.com repository
 WORKDIR /home/safeuser
-RUN git clone https://github.com/Permissionless-Software-Foundation/ipfs-service-provider
+RUN git clone https://github.com/christroutner/ipfs-service-provider-leveldb
 
 # Switch to the desired branch. `master` is usually stable,
 # and `stage` has the most up-to-date changes.
-WORKDIR /home/safeuser/ipfs-service-provider
+WORKDIR /home/safeuser/ipfs-service-provider-leveldb
 
 # For development: switch to unstable branch
 RUN git checkout ct-unstable
@@ -71,6 +71,12 @@ EXPOSE 5010
 
 # Start the application.
 #COPY start-production.sh start-production.sh
-CMD ["./start-production.sh"]
+#CMD ["./start-production.sh"]
+
+CMD ["npm", "start"]
 
 #CMD ["npm", "start"]
+
+# Use for debugging docker container
+#COPY temp.js temp.js
+#CMD ["node", "temp.js"]

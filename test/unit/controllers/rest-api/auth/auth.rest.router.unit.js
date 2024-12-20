@@ -4,16 +4,12 @@
 
 // Public npm libraries
 import { assert } from 'chai'
-
 import sinon from 'sinon'
 
 // Local support libraries
 import adapters from '../../../mocks/adapters/index.js'
-
 import UseCasesMock from '../../../mocks/use-cases/index.js'
-
 // const app = require('../../../mocks/app-mock')
-
 import AuthRouter from '../../../../../src/controllers/rest-api/auth/index.js'
 
 let uut
@@ -22,7 +18,7 @@ let sandbox
 
 // const mockContext = require('../../../../unit/mocks/ctx-mock').context
 
-describe('#Auth-REST-Router', () => {
+describe('#controllers/rest-api/auth/auth.rest.router.js', () => {
   // const testUser = {}
 
   beforeEach(() => {

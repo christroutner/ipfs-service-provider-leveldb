@@ -14,7 +14,7 @@
   this refactor did not result in any breaking changes.
 */
 
-import User from '../../../adapters/localdb/models/users.js'
+// import User from '../../../adapters/localdb/models/users.js'
 
 import config from '../../../../config/index.js'
 import jwt from 'jsonwebtoken'
@@ -23,8 +23,23 @@ import wlogger from '../../../adapters/wlogger.js'
 let _this
 
 class Validators {
-  constructor () {
-    this.User = User
+  constructor (localConfig = {}) {
+    // Dependency Injection.
+    this.adapters = localConfig.adapters
+    if (!this.adapters) {
+      throw new Error(
+        'Instance of Adapters library required when instantiating Validators middleware.'
+      )
+    }
+    this.useCases = localConfig.useCases
+    if (!this.useCases) {
+      throw new Error(
+        'Instance of Use Cases library required when instantiating Validators middleware.'
+      )
+    }
+
+    // Encapsulate dependencies
+    // this.User = User
     this.jwt = jwt
     this.config = config
 
@@ -33,6 +48,7 @@ class Validators {
 
   async ensureUser (ctx, next) {
     try {
+      // console.log('ensureUser() called')
       const token = _this.getToken(ctx)
 
       if (!token) {
@@ -44,11 +60,13 @@ class Validators {
         // console.log(`token: ${JSON.stringify(token, null, 2)}`)
         // console.log(`config: ${JSON.stringify(config, null, 2)}`)
         decoded = _this.jwt.verify(token, config.token)
+        console.log('decoded: ', decoded)
       } catch (err) {
         throw new Error('Could not verify JWT')
       }
 
-      ctx.state.user = await _this.User.findById(decoded.id, '-password')
+      // ctx.state.user = await _this.User.findById(decoded.id, '-password')
+      ctx.state.user = await this.useCases.user.getUser({ email: decoded.email })
 
       if (!ctx.state.user) {
         // console.log('Err: Could not find user.')
@@ -58,7 +76,7 @@ class Validators {
       // return next()
       return true
     } catch (error) {
-      // console.log('Ensure user error: ', error)
+      console.log('Ensure user error: ', error)
       // console.log('ctx: ', ctx)
       ctx.status = 401
       ctx.throw(401, error.message)
@@ -89,7 +107,8 @@ class Validators {
         throw new Error('Could not verify JWT')
       }
 
-      ctx.state.user = await _this.User.findById(decoded.id, '-password')
+      // ctx.state.user = await _this.User.findById(decoded.id, '-password')
+      ctx.state.user = await this.useCases.user.getUser({ email: decoded.email })
       if (!ctx.state.user) {
         // console.log(`Err: Could not find user.`)
         // ctx.throw(401)
@@ -125,8 +144,8 @@ class Validators {
       }
 
       // The user ID targeted in this API call.
-      const targetId = ctx.params.id
-      // console.log(`targetId: ${JSON.stringify(targetId, null, 2)}`)
+      const targetId = ctx.params.email
+      console.log(`targetId: ${JSON.stringify(targetId, null, 2)}`)
 
       let decoded = null
       try {
@@ -139,7 +158,8 @@ class Validators {
         throw new Error('Could not verify JWT')
       }
 
-      ctx.state.user = await _this.User.findById(decoded.id, '-password')
+      // ctx.state.user = await _this.User.findById(decoded.id, '-password')
+      ctx.state.user = await this.useCases.user.getUser({ email: decoded.email })
       if (!ctx.state.user) {
         // console.log(`Err: Could not find user.`)
         // ctx.throw(401)
@@ -150,9 +170,9 @@ class Validators {
       // console.log(`ctx.state.user: ${JSON.stringify(ctx.state.user, null, 2)}`)
       // Ensure the calling user and the target user are the same.
 
-      if (ctx.state.user._id.toString() !== targetId.toString()) {
+      if (ctx.state.user.email !== targetId.toString()) {
         wlogger.verbose(
-          `Calling user and target user do not match! Calling user: ${ctx.state.user._id}, Target user: ${targetId}`
+          `Calling user and target user do not match! Calling user: ${ctx.state.user.email}, Target user: ${targetId}`
         )
 
         // If they don't match, then the calling user better be an admin.
@@ -167,7 +187,7 @@ class Validators {
       // return next()
       return true
     } catch (error) {
-      // console.log('Error in ensureTargetUserOrAdmin(): ', error)
+      console.log('Error in ensureTargetUserOrAdmin(): ', error)
       ctx.status = 401
       ctx.throw(401, error.message)
     }

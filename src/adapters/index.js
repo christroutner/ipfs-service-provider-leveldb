@@ -9,7 +9,7 @@ import BCHJS from '@psf/bch-js'
 
 // Load individual adapter libraries.
 import IPFSAdapter from './ipfs/index.js'
-import LocalDB from './localdb/index.js'
+// import LocalDB from './localdb/index.js'
 import LogsAPI from './logapi.js'
 import Passport from './passport.js'
 import Nodemailer from './nodemailer.js'
@@ -18,12 +18,13 @@ import JSONFiles from './json-files.js'
 import FullStackJWT from './fullstack-jwt.js'
 import config from '../../config/index.js'
 import Wallet from './wallet.adapter.js'
+import LevelDb from './leveldb/index.js'
 
 class Adapters {
   constructor (localConfig = {}) {
     // Encapsulate dependencies
     this.ipfs = new IPFSAdapter()
-    this.localdb = new LocalDB()
+    // this.localdb = new LocalDB()
     this.logapi = new LogsAPI()
     this.passport = new Passport()
     this.nodemailer = new Nodemailer()
@@ -31,6 +32,7 @@ class Adapters {
     this.bchjs = new BCHJS()
     this.config = config
     this.wallet = new Wallet(localConfig)
+    this.levelDb = new LevelDb()
 
     // Get a valid JWT API key and instance bch-js.
     this.fullStackJwt = new FullStackJWT(config)
@@ -64,6 +66,9 @@ class Adapters {
         // These lines are here to ensure code coverage hits 100%.
         console.log('Not starting IPFS node since this is an e2e test.')
       }
+
+      // Load the Level Database
+      this.levelDb.openDbs()
 
       console.log('Async Adapters have been started.')
 

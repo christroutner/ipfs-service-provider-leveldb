@@ -23,10 +23,18 @@ class UserRESTControllerLib {
     }
 
     // Encapsulate dependencies
-    this.UserModel = this.adapters.localdb.Users
+    // this.UserModel = this.adapters.localdb.Users
     // this.userUseCases = this.useCases.user
 
     _this = this
+
+    // Bind 'this' object to all subfunctions.
+    this.createUser = this.createUser.bind(this)
+    this.getUsers = this.getUsers.bind(this)
+    this.getUser = this.getUser.bind(this)
+    this.updateUser = this.updateUser.bind(this)
+    this.deleteUser = this.deleteUser.bind(this)
+    this.handleError = this.handleError.bind(this)
   }
 
   /**
@@ -36,7 +44,7 @@ class UserRESTControllerLib {
    * @apiGroup REST Users
    *
    * @apiExample Example usage:
-   * curl -H "Content-Type: application/json" -X POST -d '{ "user": { "email": "email@format.com", "name": "my name", "password": "secretpasas" } }' localhost:5010/users
+   * curl -H "Content-Type: application/json" -X POST -d '{ "user": { "email": "email@format.com", "name": "my name", "password": "secretpasas" } }' localhost:5020/users
    *
    * @apiParam {Object} user          User object (required)
    * @apiParam {String} user.email Email
@@ -72,21 +80,29 @@ class UserRESTControllerLib {
    */
   async createUser (ctx) {
     try {
+      console.log('createUser REST controller called.')
       const userObj = ctx.request.body.user
 
-      const { userData, token } = await _this.useCases.user.createUser(userObj)
+      // const { userData, token } = await _this.useCases.user.createUser(userObj)
+      // // console.log('userData: ', userData)
+      // // console.log('token: ', token)
+      //
+
+      const { userData, token } = await this.useCases.user.createUser(userObj)
       // console.log('userData: ', userData)
       // console.log('token: ', token)
+
+      delete userData.password
 
       ctx.body = {
         user: userData,
         token
       }
     } catch (err) {
-      // console.log(`err.message: ${err.message}`)
+      console.log(`err.message: ${err.message}`)
       // console.log('err: ', err)
       // ctx.throw(422, err.message)
-      _this.handleError(ctx, err)
+      this.handleError(ctx, err)
     }
   }
 
@@ -120,7 +136,10 @@ class UserRESTControllerLib {
    */
   async getUsers (ctx) {
     try {
-      const users = await _this.useCases.user.getAllUsers()
+      console.log('controller getUsers() called')
+      // const users = await _this.useCases.user.getAllUsers()
+
+      const users = await this.useCases.user.getAllUsers()
 
       ctx.body = { users }
     } catch (err) {
@@ -130,13 +149,13 @@ class UserRESTControllerLib {
   }
 
   /**
-   * @api {get} /users/:id Get user by id
+   * @api {get} /users/:email Get user by email
    * @apiPermission user
    * @apiName GetUser
    * @apiGroup REST Users
    *
    * @apiExample Example usage:
-   * curl -H "Content-Type: application/json" -X GET localhost:5010/users/56bd1da600a526986cf65c80
+   * curl -H "Content-Type: application/json" -X GET localhost:5020/users/email@format.com
    *
    * @apiSuccess {Object}   users           User object
    * @apiSuccess {ObjectId} users._id       User id
@@ -159,7 +178,8 @@ class UserRESTControllerLib {
    */
   async getUser (ctx, next) {
     try {
-      const user = await _this.useCases.user.getUser(ctx.params)
+      // const user = await _this.useCases.user.getUser(ctx.params)
+      const user = await this.useCases.user.getUser(ctx.params)
 
       ctx.body = {
         user
@@ -218,6 +238,7 @@ class UserRESTControllerLib {
   async updateUser (ctx) {
     try {
       const existingUser = ctx.body.user
+      // console.log('controller updateUser() existingUser: ', existingUser)
       const newData = ctx.request.body.user
 
       const user = await _this.useCases.user.updateUser(existingUser, newData)
@@ -237,7 +258,7 @@ class UserRESTControllerLib {
    * @apiGroup REST Users
    *
    * @apiExample Example usage:
-   * curl -H "Content-Type: application/json" -X DELETE localhost:5000/users/56bd1da600a526986cf65c80
+   * curl -H "Content-Type: application/json" -X DELETE localhost:5020/users/email@format.com
    *
    * @apiSuccess {StatusCode} 200
    *

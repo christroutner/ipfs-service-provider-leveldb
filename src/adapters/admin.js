@@ -15,10 +15,10 @@
 
 // Global npm libraries
 import axios from 'axios'
-import mongoose from 'mongoose'
+// import mongoose from 'mongoose'
 
 // Local libraries
-import User from '../adapters/localdb/models/users.js'
+// import User from '../adapters/localdb/models/users.js'
 import config from '../../config/index.js'
 import JsonFiles from '../adapters/json-files.js'
 
@@ -38,21 +38,30 @@ const context = {}
 let _this
 class Admin {
   constructor () {
+    // Encapsulate dependencies
     this.axios = axios
-    this.User = User
+    // this.User = User
     this.config = config
     this.jsonFiles = jsonFiles
     this.context = context
 
     _this = this
+
+    // Bind 'this' object to all subfunctions
+    this.createSystemUser = this.createSystemUser.bind(this)
+    this.deleteExistingSystemUser = this.deleteExistingSystemUser.bind(this)
+    this.loginAdmin = this.loginAdmin.bind(this)
+    this._randomString = this._randomString.bind(this)
   }
 
   // Create the first user in the system. A 'admin' level system user that is
   // used by the Listing Manager and test scripts, in order access private API
   // functions.
-  async createSystemUser () {
+  async createSystemUser (inObj = {}) {
     // Create the system user.
     try {
+      const { adapters } = inObj
+
       context.password = _this._randomString(20)
 
       const options = {
@@ -74,21 +83,21 @@ class Admin {
       context.token = result.data.token
 
       // Get the mongoDB entry
-      const user = await _this.User.findById(context.id)
+      const user = await adapters.levelDb.userDb.get('system@system.com')
+      // console.log('createSystemUser() user: ', user)
 
       // Change the user type to admin
       user.type = 'admin'
       // console.log(`user created: ${JSON.stringify(user, null, 2)}`)
 
       // Save the user model.
-      await user.save()
+      await adapters.levelDb.userDb.put('system@system.com', user)
 
       // console.log(`admin user created: ${JSON.stringify(result.body, null, 2)}`)
       // console.log(`with password: ${context.password}`)
 
       // Write out the system user information to a JSON file that external
       // applications like the Task Manager and the test scripts can access.
-
       await jsonFiles.writeJSON(context, JSON_PATH)
       // console.log('context: ', context)
       // console.log('JSON_PATH: ', JSON_PATH)
@@ -96,13 +105,13 @@ class Admin {
       return context
     } catch (err) {
       // Handle existing system user.
-      if (err.response.status === 422) {
+      if (err.response && err.response.status === 422) {
         try {
           // Delete the existing user
-          await _this.deleteExistingSystemUser()
+          await _this.deleteExistingSystemUser(inObj)
 
           // Call this function again.
-          return _this.createSystemUser()
+          return _this.createSystemUser(inObj)
         } catch (err2) {
           console.error(
             'Error in admin.js/createSystemUser() while trying generate new system user.'
@@ -111,24 +120,28 @@ class Admin {
           throw err2
         }
       } else {
-        console.log('Error in admin.js/createSystemUser: ')
+        console.log('Error in admin.js/createSystemUser: ', err)
         // process.end(1)
         throw err
       }
     }
   }
 
-  async deleteExistingSystemUser () {
+  async deleteExistingSystemUser (inObj = {}) {
     try {
-      mongoose.Promise = global.Promise
-      mongoose.set('useCreateIndex', true) // Stop deprecation warning.
+      // mongoose.Promise = global.Promise
+      // mongoose.set('useCreateIndex', true) // Stop deprecation warning.
 
-      await mongoose.connect(config.database, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-      })
+      // await mongoose.connect(config.database, {
+      //   useNewUrlParser: true,
+      //   useUnifiedTopology: true
+      // })
 
-      await _this.User.deleteOne({ email: 'system@system.com' })
+      // await _this.User.deleteOne({ email: 'system@system.com' })
+
+      const { adapters } = inObj
+
+      await adapters.levelDb.userDb.del('system@system.com')
     } catch (err) {
       console.log('Error in admin.js/deleteExistingSystemUser()')
       throw err

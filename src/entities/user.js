@@ -2,6 +2,9 @@
   User Entity
 */
 
+// Global npm libraries
+import { v4 as uuidv4 } from 'uuid'
+
 class User {
   validate ({ name, email, password } = {}) {
     // Input Validation
@@ -16,6 +19,9 @@ class User {
     }
 
     const userData = { name, email, password }
+
+    // Generate a unique ID for the user.
+    userData.id = uuidv4()
 
     return userData
   }

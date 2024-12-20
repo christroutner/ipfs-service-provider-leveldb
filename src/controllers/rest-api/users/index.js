@@ -35,7 +35,7 @@ class UserRouter {
 
     // Encapsulate dependencies.
     this.userRESTController = new UserRESTControllerLib(dependencies)
-    this.validators = new Validators()
+    this.validators = new Validators(localConfig)
 
     // Instantiate the router and set the base route.
     const baseUrl = '/users'
@@ -54,9 +54,9 @@ class UserRouter {
     // Define the routes and attach the controller.
     this.router.post('/', this.userRESTController.createUser)
     this.router.get('/', this.getAll)
-    this.router.get('/:id', this.getById)
-    this.router.put('/:id', this.updateUser)
-    this.router.delete('/:id', this.deleteUser)
+    this.router.get('/:email', this.getByEmail)
+    this.router.put('/:email', this.updateUser)
+    this.router.delete('/:email', this.deleteUser)
 
     // Attach the Controller routes to the Koa app.
     app.use(this.router.routes())
@@ -68,7 +68,7 @@ class UserRouter {
     await _this.userRESTController.getUsers(ctx, next)
   }
 
-  async getById (ctx, next) {
+  async getByEmail (ctx, next) {
     await _this.validators.ensureUser(ctx, next)
     await _this.userRESTController.getUser(ctx, next)
   }

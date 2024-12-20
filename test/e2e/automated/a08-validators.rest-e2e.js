@@ -1,10 +1,16 @@
 /*
+// Global npm libraries
 import { assert } from 'chai';
+import sinon from 'sinon';
+import util from 'util';
+
+// Local libraries
 import testUtils from '../../utils/test-utils.js';
 import Validators from '../../../src/controllers/rest-api/middleware/validators.js';
-import sinon from 'sinon';
 import { context as mockContext } from '../../unit/mocks/ctx-mock.js';
-import util from 'util';
+import Adapters from '../../../src/adapters/index.js'
+import UseCases from '../../../src/use-cases/index.js'
+
 util.inspect.defaultOptions = { depth: 1 }
 
 const context = {}
@@ -39,8 +45,11 @@ describe('Validators', () => {
     // const admin = await adminLib.loginAdmin()
     // console.log(`admin: ${JSON.stringify(admin, null, 2)}`)
   })
+
   beforeEach(() => {
-    uut = new Validators()
+    const adapters = new Adapters()
+    const useCases = new UseCases({adapters})
+    uut = new Validators({adapters, useCases})
 
     sandbox = sinon.createSandbox()
   })

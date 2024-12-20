@@ -16,7 +16,7 @@ let uut
 let sandbox
 let ctx
 
-describe('#Users-REST-Controller', () => {
+describe('#controllers/rest-api/users/controller.js', () => {
   // const testUser = {}
 
   beforeEach(() => {
@@ -73,6 +73,19 @@ describe('#Users-REST-Controller', () => {
     })
 
     it('should return 200 status on success', async () => {
+      // Mock dependencies
+      sandbox.stub(uut.useCases.user, 'createUser').resolves({
+        userData: {
+          name: 'test',
+          email: 'test@test.com',
+          password: '$2a$10$E6UqlKVtL1Aq643o3CbdWO7y60BWbSBk3R5r.cekk.T1QwZav721G',
+          id: '7133678a-8777-4d0a-a45d-923fe7776b02',
+          type: 'user',
+          token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJpYXQiOjE3MzQ1NTA3ODN9.jRHVmNJENK7Fkpw8Cf_RlSgCFoqS3LH3epj5aVWXZlk'
+        },
+        token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJpYXQiOjE3MzQ1NTA3ODN9.jRHVmNJENK7Fkpw8Cf_RlSgCFoqS3LH3epj5aVWXZlk'
+      })
+
       ctx.request.body = {
         user: {
           email: 'test02@test.com',

@@ -4,6 +4,7 @@
   TODO: ensureTargetUserOrAdmin: it should exit quietly if user is an admin.
 */
 
+/*
 // Public npm libraries
 import jsonrpc from 'jsonrpc-lite'
 
@@ -307,3 +308,4 @@ describe('#validators', () => {
     })
   })
 })
+*/

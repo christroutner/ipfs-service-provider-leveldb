@@ -15,7 +15,7 @@ import convert from 'koa-convert'
 import logger from 'koa-logger'
 import mongoose from 'mongoose'
 import session from 'koa-generic-session'
-import passport from 'koa-passport'
+// import passport from 'koa-passport'
 import mount from 'koa-mount'
 import serve from 'koa-static'
 import cors from 'kcors'
@@ -28,7 +28,7 @@ import errorMiddleware from '../src/controllers/rest-api/middleware/error.js'
 import { usageMiddleware } from '../src/use-cases/usage-use-cases.js'
 import wlogger from '../src/adapters/wlogger.js'
 import Controllers from '../src/controllers/index.js'
-import { applyPassportMods } from '../config/passport.js'
+// import { applyPassportMods } from '../config/passport.js'
 
 class Server {
   constructor () {
@@ -46,18 +46,18 @@ class Server {
       const app = new Koa()
       app.keys = [this.config.session]
 
-      if (!this.config.noMongo) {
-        // Connect to the Mongo Database.
-        this.mongoose.Promise = global.Promise
-        this.mongoose.set('useCreateIndex', true) // Stop deprecation warning.
-        console.log(
-          `Connecting to MongoDB with this connection string: ${this.config.database}`
-        )
-        await this.mongoose.connect(this.config.database, {
-          useUnifiedTopology: true,
-          useNewUrlParser: true
-        })
-      }
+      // if (!this.config.noMongo) {
+      //   // Connect to the Mongo Database.
+      //   this.mongoose.Promise = global.Promise
+      //   this.mongoose.set('useCreateIndex', true) // Stop deprecation warning.
+      //   console.log(
+      //     `Connecting to MongoDB with this connection string: ${this.config.database}`
+      //   )
+      //   await this.mongoose.connect(this.config.database, {
+      //     useUnifiedTopology: true,
+      //     useNewUrlParser: true
+      //   })
+      // }
 
       console.log(`Starting environment: ${this.config.env}`)
       console.log(`Debug level: ${this.config.debugLevel}`)
@@ -78,9 +78,9 @@ class Server {
 
       // User Authentication
       // require('../config/passport')
-      applyPassportMods(passport)
-      app.use(passport.initialize())
-      app.use(passport.session())
+      // applyPassportMods(passport)
+      // app.use(passport.initialize())
+      // app.use(passport.session())
 
       // Enable CORS for testing
       // THIS IS A SECURITY RISK. COMMENT OUT FOR PRODUCTION
@@ -106,11 +106,11 @@ class Server {
       this.server = await app.listen(this.config.port)
       console.log(`Server started on ${this.config.port}`)
 
-      if (!this.config.noMongo) {
-        // Create the system admin user.
-        const success = await this.adminLib.createSystemUser()
-        if (success) console.log('System admin user created.')
-      }
+      // if (!this.config.noMongo) {
+      // Create the system admin user.
+      const success = await this.adminLib.createSystemUser({ adapters: this.controllers.adapters })
+      if (success) console.log('System admin user created.')
+      // }
 
       // Attach the other IPFS controllers.
       // Skip if this is a test environment.
@@ -127,6 +127,9 @@ class Server {
       return app
     } catch (err) {
       console.error('Could not start server. Error: ', err)
+
+      // Close the LevelDB.
+      await this.controllers.adapters.levelDb.closeDbs()
 
       console.log(
         'Exiting after 5 seconds. Depending on process manager to restart.'

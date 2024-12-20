@@ -18,7 +18,10 @@ class Passport {
 
         _this.passport.authenticate('local', (err, user) => {
           try {
+            console.log('passport err: ', err)
+
             if (err) throw err
+            console.log('passport user: ', user)
 
             resolve(user)
           } catch (err) {
