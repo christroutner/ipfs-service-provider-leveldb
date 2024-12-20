@@ -61,7 +61,7 @@ class RESTControllers {
     // Attach the REST API Controllers associated with the /logs route
     const logsRESTController = new LogsRESTController(dependencies)
     logsRESTController.attach(app)
-    
+
     // // Attach the REST API Controllers associated with the /ipfs route
     // const ipfsRESTController = new IpfsRESTController(dependencies)
     // ipfsRESTController.attach(app)
