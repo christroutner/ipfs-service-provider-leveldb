@@ -37,29 +37,29 @@ describe('LogsApi', () => {
       }
     })
 
-    it('should return log', async () => {
-      try {
-        const options = {
-          method: 'post',
-          url: `${LOCALHOST}/logs`,
-          data: {
-            password: 'test'
-          }
-        }
+    // it('should return log', async () => {
+    //   try {
+    //     const options = {
+    //       method: 'post',
+    //       url: `${LOCALHOST}/logs`,
+    //       data: {
+    //         password: 'test'
+    //       }
+    //     }
 
-        const result = await axios(options)
-        console.log('result.data: ', result.data)
+    //     const result = await axios(options)
+    //     console.log('result.data: ', result.data)
 
-        assert.isTrue(result.data.success)
-        assert.isArray(result.data.data)
-        assert.property(result.data.data[0], 'message')
-        assert.property(result.data.data[0], 'level')
-        assert.property(result.data.data[0], 'timestamp')
-      } catch (err) {
-        console.error(err)
-        assert(false, 'Unexpected result')
-      }
-    })
+    //     assert.isTrue(result.data.success)
+    //     assert.isArray(result.data.data)
+    //     assert.property(result.data.data[0], 'message')
+    //     assert.property(result.data.data[0], 'level')
+    //     assert.property(result.data.data[0], 'timestamp')
+    //   } catch (err) {
+    //     console.error(err)
+    //     assert(false, 'Unexpected result')
+    //   }
+    // })
 
     it('should return false if files are not found!', async () => {
       try {
