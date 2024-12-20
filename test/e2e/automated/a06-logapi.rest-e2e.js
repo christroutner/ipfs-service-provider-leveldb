@@ -55,6 +55,7 @@ describe('LogsApi', () => {
         assert.property(result.data.data[0], 'level')
         assert.property(result.data.data[0], 'timestamp')
       } catch (err) {
+        console.error(err)
         assert(false, 'Unexpected result')
       }
     })
