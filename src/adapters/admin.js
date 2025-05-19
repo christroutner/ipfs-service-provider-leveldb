@@ -62,6 +62,26 @@ class Admin {
     try {
       const { adapters } = inObj
 
+      context.password = _this._randomString(20)
+
+      const options = {
+        method: 'POST',
+        url: `${LOCALHOST}/users`,
+        data: {
+          user: {
+            email: 'system@system.com',
+            password: context.password,
+            name: 'admin'
+          }
+        }
+      }
+      const result = await _this.axios.request(options)
+      // console.log('admin.data: ', result.data)
+
+      context.email = result.data.user.email
+      context.id = result.data.user._id
+      context.token = result.data.token
+
       // Get the mongoDB entry
       const user = await adapters.levelDb.userDb.get('system@system.com')
       // console.log('createSystemUser() user: ', user)
