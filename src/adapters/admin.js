@@ -62,22 +62,6 @@ class Admin {
     try {
       const { adapters } = inObj
 
-      context.password = _this._randomString(20)
-
-      // Check if the user already exists
-      let adminUser = await _this.User.findOne({ email: context.email })
-
-      if (adminUser) {
-        // Update the password
-        adminUser.password = context.password
-      } else {
-        // Create a new admin user
-        adminUser = new _this.User(context)
-      }
-      // Update context with the new user id and token
-      context.id = adminUser._id
-      context.token = await adminUser.generateToken()
-
       // Get the mongoDB entry
       const user = await adapters.levelDb.userDb.get('system@system.com')
       // console.log('createSystemUser() user: ', user)

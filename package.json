@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "test": "npm run test:unit",
+    "test": "npm run test:all",
     "test:all": "set SVC_ENV=test && c8 --reporter=text mocha --exit --timeout 15000 --recursive test/unit test/e2e/automated/",
     "test:unit": "set SVC_ENV=test && c8 --reporter=text mocha --exit --timeout 15000 --recursive test/unit/",
     "test:e2e:auto": "set SVC_ENV=test && mocha --exit --timeout 15000 test/e2e/automated/",
