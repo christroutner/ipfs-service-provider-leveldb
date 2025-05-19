@@ -34,7 +34,7 @@ class UsageRouter {
 
     // Encapsulate dependencies.
     this.usageRESTController = new UsageRESTControllerLib(dependencies)
-    this.validators = new Validators()
+    this.validators = new Validators(dependencies)
 
     // Instantiate the router and set the base route.
     const baseUrl = '/usage'

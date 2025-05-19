@@ -165,7 +165,7 @@ class Admin {
           Accept: 'application/json'
         },
         data: {
-          email: 'system@system.com',
+          email: existingUser.email,
           password: existingUser.password
         }
       }
