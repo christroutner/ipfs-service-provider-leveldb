@@ -133,6 +133,8 @@ export default {
   // IPFS Ports
   ipfsTcpPort: process.env.IPFS_TCP_PORT ? process.env.IPFS_TCP_PORT : 4001,
   ipfsWsPort: process.env.IPFS_WS_PORT ? process.env.IPFS_WS_PORT : 4003,
+  ipfsWebRtcPort: process.env.IPFS_WEB_RTC_PORT ? process.env.IPFS_WEB_RTC_PORT : 4005,
+  connectPref: process.env.CONNECT_PREF, // Used in helia-coord to select connection preference.
 
   // Settings for production, using external go-ipfs node.
   isProduction: process.env.SVC_ENV === 'prod' ? true : false,
@@ -150,7 +152,13 @@ export default {
 
     // v2 Circuit Relay server (FullStack.cash)
     // '/ip4/78.46.129.7/tcp/4001/p2p/12D3KooWFQ11GQ5NubsJGhYZ4X3wrAGimLevxfm6HPExCrMYhpSL'
-  ]
+  ],
 
   // END IPFS CONFIGURATION
+
+  // Account Configuration
+  disableNewAccounts: process.env.DISABLE_NEW_ACCOUNTS ? true : false,
+
+  // Admin password
+  adminPassword: process.env.ADMIN_PASSWORD
 }

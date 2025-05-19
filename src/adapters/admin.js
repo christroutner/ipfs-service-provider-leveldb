@@ -64,23 +64,19 @@ class Admin {
 
       context.password = _this._randomString(20)
 
-      const options = {
-        method: 'POST',
-        url: `${LOCALHOST}/users`,
-        data: {
-          user: {
-            email: 'system@system.com',
-            password: context.password,
-            name: 'admin'
-          }
-        }
-      }
-      const result = await _this.axios.request(options)
-      // console.log('admin.data: ', result.data)
+      // Check if the user already exists
+      let adminUser = await _this.User.findOne({ email: context.email })
 
-      context.email = result.data.user.email
-      context.id = result.data.user._id
-      context.token = result.data.token
+      if (adminUser) {
+        // Update the password
+        adminUser.password = context.password
+      } else {
+        // Create a new admin user
+        adminUser = new _this.User(context)
+      }
+      // Update context with the new user id and token
+      context.id = adminUser._id
+      context.token = await adminUser.generateToken()
 
       // Get the mongoDB entry
       const user = await adapters.levelDb.userDb.get('system@system.com')
@@ -165,7 +161,7 @@ class Admin {
           Accept: 'application/json'
         },
         data: {
-          email: 'system@system.com',
+          email: existingUser.email,
           password: existingUser.password
         }
       }
