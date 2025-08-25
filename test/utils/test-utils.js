@@ -171,6 +171,51 @@ async function getAdminJWT () {
   }
 }
 
+// Fetches all users from the database.
+// async function getAllUsers () {
+//   try {
+//     const adminJWT = await getAdminJWT()
+//     const options = {
+//       method: 'GET',
+//       url: `${LOCALHOST}/users`,
+//       headers: {
+//         Authorization: `Bearer ${adminJWT}`
+//       }
+//     }
+//     const result = await axios(options)
+//     return result.data.users
+//   } catch (err) {
+//     console.error('Error in test/utils.js/getAllUsers()', err)
+//     throw err
+//   }
+// }
+
+// Deletes all users from the database.
+// async function deleteAllUsers () {
+//   try {
+//     const allUsers = await getAllUsers()
+//     const adminJWT = await getAdminJWT()
+//     for (let i = 0; i < allUsers.length; i++) {
+//       const user = allUsers[i]
+//       // Skip the admin user.
+//       if (user.type === 'admin') {
+//         continue
+//       }
+//       const options = {
+//         method: 'DELETE',
+//         url: `${LOCALHOST}/users/${user._id}`,
+//         headers: {
+//           Authorization: `Bearer ${adminJWT}`
+//         }
+//       }
+//       await axios(options)
+//     }
+//   } catch (err) {
+//     console.error('Error in test/utils.js/deleteAllUsers()', err)
+//     throw err
+//   }
+// }
+
 export default {
   // cleanDb,
   createUser,
